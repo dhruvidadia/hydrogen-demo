@@ -41,12 +41,20 @@ export default function Recover() {
   const action = useActionData();
 
   return (
-    <div className="account-recover">
-      <div>
+    <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6" 
+    data-aos="zoom-in-up"
+    data-aos-offset="200"
+    data-aos-delay="50"
+    data-aos-duration="500"
+    data-aos-easing="ease-in-out"
+    data-aos-mirror="true"
+    data-aos-once="false"
+    >
+      <div className="mb-8 text-center">
         {action?.resetRequested ? (
           <>
-            <h1>Request Sent.</h1>
-            <p>
+            <h1 className="my-3 text-4xl font-bold">Request Sent.</h1>
+            <p className="text-sm dark:text-gray-400">
               If that email address is in our system, you will receive an email
               with instructions about how to reset your password in a few
               minutes.
@@ -56,15 +64,15 @@ export default function Recover() {
           </>
         ) : (
           <>
-            <h1>Forgot Password.</h1>
-            <p>
+            <h1 className="my-3 text-4xl font-bold">Forgot Password.</h1>
+            <p className="text-sm dark:text-gray-400">
               Enter the email address associated with your account to receive a
               link to reset your password.
             </p>
             <br />
-            <Form method="POST">
+            <Form method="POST" className="space-y-12 mx-auto">
               <fieldset>
-                <label htmlFor="email">Email</label>
+                <label htmlFor="email" className="text-sm">Email</label>
                 <input
                   aria-label="Email address"
                   autoComplete="email"
@@ -84,14 +92,14 @@ export default function Recover() {
                   </mark>
                 </p>
               ) : (
-                <br />
+                <p className='hidden'></p>
               )}
-              <button type="submit">Request Reset Link</button>
+              <button type="submit" className="w-full px-8 py-3 font-semibold rounded-md std-btn">Request Reset Link</button>
             </Form>
             <div>
               <br />
               <p>
-                <Link to="/account/login">Login →</Link>
+                <Link to="/account/login" rel="noopener noreferrer" className="hover:underline dark:text-violet-400">Back to login</Link>
               </p>
             </div>
           </>

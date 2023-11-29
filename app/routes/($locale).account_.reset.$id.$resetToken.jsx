@@ -60,36 +60,54 @@ export default function Reset() {
   const action = useActionData();
 
   return (
-    <div className="account-reset">
-      <h1>Reset Password.</h1>
-      <p>Enter a new password for your account.</p>
-      <Form method="POST">
-        <fieldset>
-          <label htmlFor="password">Password</label>
-          <input
-            aria-label="Password"
-            autoComplete="current-password"
-            // eslint-disable-next-line jsx-a11y/no-autofocus
-            autoFocus
-            id="password"
-            minLength={8}
-            name="password"
-            placeholder="Password"
-            required
-            type="password"
-          />
-          <label htmlFor="passwordConfirm">Re-enter password</label>
-          <input
-            aria-label="Re-enter password"
-            autoComplete="current-password"
-            id="passwordConfirm"
-            minLength={8}
-            name="passwordConfirm"
-            placeholder="Re-enter password"
-            required
-            type="password"
-          />
-        </fieldset>
+    <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6" 
+    data-aos="zoom-in-up"
+    data-aos-offset="200"
+    data-aos-delay="50"
+    data-aos-duration="500"
+    data-aos-easing="ease-in-out"
+    data-aos-mirror="true"
+    data-aos-once="false"
+    >
+      <div className="mb-8 text-center">
+        <h1 className="my-3 text-4xl font-bold">Reset Password</h1>
+        <p className="text-sm dark:text-gray-400">Enter a new password for your account.</p>
+      </div>
+      <form method="POST" className="space-y-12 mx-auto">
+        <div className="space-y-4">
+          <div>
+            <label for="email" className="block mb-2 text-sm">Password</label>
+            <input
+              aria-label="Password"
+              autoComplete="current-password"
+              // eslint-disable-next-line jsx-a11y/no-autofocus
+              autoFocus
+              id="password"
+              minLength={8}
+              name="password"
+              placeholder="Password"
+              required
+              type="password"
+              className="w-full px-3 py-2 border rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+            />
+          </div>
+          <div>
+            <div className="flex justify-between mb-2">
+              <label for="passwordConfirm" className="text-sm">Re-enter password</label>
+            </div>
+            <input
+              aria-label="Re-enter password"
+              autoComplete="current-password"
+              id="passwordConfirm"
+              minLength={8}
+              name="passwordConfirm"
+              placeholder="Re-enter password"
+              required
+              type="password"
+              className="w-full px-3 py-2 border rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+            />
+          </div>
+        </div>
         {action?.error ? (
           <p>
             <mark>
@@ -97,14 +115,15 @@ export default function Reset() {
             </mark>
           </p>
         ) : (
-          <br />
+          <p className='hidden'></p>
         )}
-        <button type="submit">Reset</button>
-      </Form>
-      <br />
-      <p>
-        <a href="/account/login">Back to login →</a>
-      </p>
+        <div className="space-y-2">
+          <div>
+            <button type="submit" className="w-full px-8 py-3 font-semibold rounded-md std-btn">Reset</button>
+          </div>
+          <Link to="/account/register" rel="noopener noreferrer" className="hover:underline dark:text-violet-400">Back to login</Link>
+        </div>
+      </form>
     </div>
   );
 }

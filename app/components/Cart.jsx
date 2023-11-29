@@ -1,6 +1,8 @@
 import {CartForm, Image, Money} from '@shopify/hydrogen';
-import {Link} from '@remix-run/react';
+import {Await, Link} from '@remix-run/react';
 import {useVariantUrl} from '~/utils';
+import ShippingBar from './ShippingBar';
+import { Suspense } from 'react';
 
 export function CartMain({layout, cart}) {
   const linesCount = Boolean(cart?.lines?.nodes?.length || 0);
@@ -8,9 +10,20 @@ export function CartMain({layout, cart}) {
     cart &&
     Boolean(cart.discountCodes.filter((code) => code.applicable).length);
   const className = `cart-main ${withDiscount ? 'with-discount' : ''}`;
-
+  const cartHasItems = !!cart && cart.totalQuantity > 0;
   return (
     <div className={className}>
+      
+      { cartHasItems ? (
+        <Suspense>
+        <Await resolve={cart?.cost?.totalAmount}>
+          {(totalAmount) => {
+            return (<ShippingBar totalAmount={totalAmount} />)
+          }}
+        </Await>
+      </Suspense>
+      ) : '' }
+      
       <CartEmpty hidden={linesCount} layout={layout} />
       <CartDetails cart={cart} layout={layout} />
     </div>
@@ -25,7 +38,7 @@ function CartDetails({layout, cart}) {
       <CartLines lines={cart?.lines} layout={layout} />
       {cartHasItems && (
         <CartSummary cost={cart.cost} layout={layout}>
-          <CartDiscounts discountCodes={cart.discountCodes} />
+          {/* <CartDiscounts discountCodes={cart.discountCodes} /> */}
           <CartCheckoutActions checkoutUrl={cart.checkoutUrl} />
         </CartSummary>
       )}
@@ -76,7 +89,7 @@ function CartLineItem({layout, line}) {
             }
           }}
         >
-          <p>
+          <p className='text-xs'>
             <strong>{product.title}</strong>
           </p>
         </Link>
@@ -100,11 +113,13 @@ function CartCheckoutActions({checkoutUrl}) {
   if (!checkoutUrl) return null;
 
   return (
-    <div>
-      <a href={checkoutUrl} target="_self">
-        <p>Continue to Checkout &rarr;</p>
+    <div className="mt-6 mb-3">
+      <a
+        href={checkoutUrl}
+        className="flex items-center justify-center rounded-md border border-transparent bg-[#0a56a5] px-6 py-2 text-base font-medium text-white shadow-sm hover:bg-[#0a56a5] hover:no-underline shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none"
+      >
+        Continue to Checkout
       </a>
-      <br />
     </div>
   );
 }
@@ -115,17 +130,16 @@ export function CartSummary({cost, layout, children = null}) {
 
   return (
     <div aria-labelledby="cart-summary" className={className}>
-      <h4>Totals</h4>
-      <dl className="cart-subtotal">
-        <dt>Subtotal</dt>
-        <dd>
-          {cost?.subtotalAmount?.amount ? (
+      <div className="flex justify-between text-base font-medium text-gray-900">
+          <p>Subtotal</p>
+          <div>{cost?.subtotalAmount?.amount ? (
             <Money data={cost?.subtotalAmount} />
           ) : (
             '-'
-          )}
-        </dd>
-      </dl>
+          )}</div>
+        </div>
+        <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
+    
       {children}
     </div>
   );
@@ -138,7 +152,11 @@ function CartLineRemoveButton({lineIds}) {
       action={CartForm.ACTIONS.LinesRemove}
       inputs={{lineIds}}
     >
-      <button type="submit">Remove</button>
+      <button type="submit">
+      <svg className="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
+        <path d="M17 4h-4V2a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v2H1a1 1 0 0 0 0 2h1v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6h1a1 1 0 1 0 0-2ZM7 2h4v2H7V2Zm1 14a1 1 0 1 1-2 0V8a1 1 0 0 1 2 0v8Zm4 0a1 1 0 0 1-2 0V8a1 1 0 0 1 2 0v8Z"/>
+      </svg>
+      </button>
     </CartForm>
   );
 }
@@ -150,30 +168,39 @@ function CartLineQuantity({line}) {
   const nextQuantity = Number((quantity + 1).toFixed(0));
 
   return (
-    <div className="cart-line-quantiy">
-      <small>Quantity: {quantity} &nbsp;&nbsp;</small>
+    <div className="cart-line-quantiy mt-2">
+      <span className='text-sm'>Quantity:  &nbsp;&nbsp;</span>
+      <div className='flex flex-row relative bg-transparent text-gray-700 items-center justify-items rounded-lg'>
       <CartLineUpdateButton lines={[{id: lineId, quantity: prevQuantity}]}>
         <button
           aria-label="Decrease quantity"
           disabled={quantity <= 1}
           name="decrease-quantity"
           value={prevQuantity}
+          className='bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400  cursor-pointer outline-none'
         >
-          <span>&#8722; </span>
+          <span className="m-auto text-2xl font-thin">−</span>
         </button>
       </CartLineUpdateButton>
+      &nbsp;
+      <span className='px-4'>{quantity}</span>
       &nbsp;
       <CartLineUpdateButton lines={[{id: lineId, quantity: nextQuantity}]}>
         <button
           aria-label="Increase quantity"
           name="increase-quantity"
           value={nextQuantity}
+          className='bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400  cursor-pointer outline-none'
         >
-          <span>&#43;</span>
+          <span className="m-auto text-2xl font-thin">+</span>
         </button>
       </CartLineUpdateButton>
+      </div>
       &nbsp;
-      <CartLineRemoveButton lineIds={[lineId]} />
+      <div className="px-3 flex justify-center items-center">
+        <CartLineRemoveButton lineIds={[lineId]}  />
+      </div>
+     
     </div>
   );
 }
@@ -199,14 +226,25 @@ function CartLinePrice({line, priceType = 'regular', ...passthroughProps}) {
 
 export function CartEmpty({hidden = false, layout = 'aside'}) {
   return (
-    <div hidden={hidden}>
+    <div hidden={hidden} className='text-center justify-center'>
       <br />
-      <p>
-        Looks like you haven&rsquo;t added anything yet, let&rsquo;s get you
-        started!
-      </p>
+      <div className='flex items-center justify-center'>
+        <Image
+            alt='empty cart'
+            aspectRatio="1/1"
+            src='https://cdn.shopify.com/s/files/1/0570/4335/3681/files/emptycart.png?v=1698734118'
+            height={200}
+            loading="lazy"
+            width={200}
+          />
+      </div>
+      
+      <h2>
+      Your cart is feeling lonely!
+      </h2>
       <br />
       <Link
+        className="relative inline-flex items-center justify-start py-3 pl-4 pr-12 overflow-hidden font-semibold text-white transition-all duration-150 ease-in-out rounded hover:pl-10 hover:pr-6 bg-black group hover:no-underline"
         to="/collections"
         onClick={() => {
           if (layout === 'aside') {
@@ -214,7 +252,15 @@ export function CartEmpty({hidden = false, layout = 'aside'}) {
           }
         }}
       >
-        Continue shopping →
+        <span className="absolute bottom-0 left-0 w-full h-1 transition-all duration-150 ease-in-out bg-[##0a56a5] hover:no-underline group-hover:h-full"></span>
+        <span className="absolute right-0 pr-4 duration-200 ease-out group-hover:translate-x-12">
+        <svg 
+        className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+        </span>
+        <span className="absolute left-0 pl-2.5 -translate-x-12 group-hover:translate-x-0 ease-out duration-200">
+        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+        </span>
+        <span className="relative w-full text-left transition-colors duration-200 ease-in-out  group-hover:text-white">Start Shopping</span>
       </Link>
     </div>
   );
@@ -244,8 +290,8 @@ function CartDiscounts({discountCodes}) {
 
       {/* Show an input to apply a discount */}
       <UpdateDiscountForm discountCodes={codes}>
-        <div>
-          <input type="text" name="discountCode" placeholder="Discount code" />
+        <div className='mt-4'>
+          <input type="text" name="discountCode" placeholder="Discount code"className='rounded' />
           &nbsp;
           <button type="submit">Apply</button>
         </div>

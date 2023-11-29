@@ -1,9 +1,35 @@
 import {json} from '@shopify/remix-oxygen';
-import {useLoaderData} from '@remix-run/react';
+import {useLoaderData, useActionData} from '@remix-run/react';
+import ContactUs from '~/components/ContactUs';
+import Pages from '~/components/Pages';
 
 export const meta = ({data}) => {
   return [{title: `Hydrogen | ${data.page.title}`}];
 };
+
+export const action = async ({request, context}) => {
+  console.log("=========In Contact===========");
+  if (request.method !== 'POST') {
+      return json({error: 'Method not allowed'}, {status: 405});
+    }
+  
+  const {storefront, session} = context;
+  const form = await request.formData();
+  const name = String(form.has('name') ? form.get('name') : '');
+  const email = String(form.has('email') ? form.get('email') : '');
+  console.log(email);
+  try {
+      return json(
+        {error: null, msg: true},
+      );
+
+  } catch (error) {
+      if (error instanceof Error) {
+        return json({error: error.message}, {status: 400});
+      }
+      return json({error}, {status: 400});
+    }
+}
 
 export async function loader({params, context}) {
   if (!params.handle) {
@@ -25,13 +51,21 @@ export async function loader({params, context}) {
 
 export default function Page() {
   const {page} = useLoaderData();
-
+  const action = useActionData();
+  const showMessage = (action?.msg) ? action.msg : false;
   return (
     <div className="page">
-      <header>
-        <h1>{page.title}</h1>
-      </header>
-      <main dangerouslySetInnerHTML={{__html: page.body}} />
+      {(page.handle == 'contact') ? (
+        <ContactUs msg={showMessage} />
+      ) : <>
+            <header>
+              <h1>{page.title}</h1>
+            </header>
+            <Pages />
+            {/* <main dangerouslySetInnerHTML={{__html: page.body}} /> */}
+        </>
+      }
+      
     </div>
   );
 }
@@ -47,6 +81,7 @@ const PAGE_QUERY = `#graphql
       id
       title
       body
+      handle
       seo {
         description
         title

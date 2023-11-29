@@ -62,11 +62,11 @@ export default function Blogs() {
 const BLOGS_QUERY = `#graphql
   query Blogs(
     $country: CountryCode
-    $endCursor: String
     $first: Int
     $language: LanguageCode
     $last: Int
     $startCursor: String
+    $endCursor: String
   ) @inContext(country: $country, language: $language) {
     blogs(
       first: $first,

@@ -1,5 +1,7 @@
 import {json, redirect} from '@shopify/remix-oxygen';
 import {Form, Link, useActionData} from '@remix-run/react';
+import { Image } from '@shopify/hydrogen';
+import { Button } from '@material-tailwind/react';
 
 export async function loader({context}) {
   const customerAccessToken = await context.session.get('customerAccessToken');
@@ -94,12 +96,26 @@ export default function Register() {
   const data = useActionData();
   const error = data?.error || null;
   return (
-    <div className="login">
-      <h1>Register.</h1>
-      <Form method="POST">
-        <fieldset>
-          <label htmlFor="email">Email address</label>
-          <input
+    <section className='felx items-center justify-center'
+    data-aos="zoom-in-up"
+    data-aos-offset="200"
+    data-aos-delay="50"
+    data-aos-duration="500"
+    data-aos-easing="ease-in-out"
+    data-aos-mirror="true"
+    data-aos-once="false"
+    >
+      <div className="bg-gray-50 flex rounded-2x1 shadow-lg max-w-3xl p-5 py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
+      <div className='sm:w-1/2 px-16'>
+      <div className="mb-8 text-center">
+        <h1 className="my-3 text-4xl font-bold">Create an account</h1>
+        <p className="text-sm dark:text-gray-400">Already have an account? <Link to="/account/login" rel="noopener noreferrer" className="hover:underline dark:text-violet-400"> Sign in </Link></p>
+      </div>
+      <form method="POST" className="space-y-12 mx-auto">
+        <div className="space-y-4">
+          <div>
+            <label for="email" className="block mb-2 text-sm">Email address</label>
+            <input
             id="email"
             name="email"
             type="email"
@@ -107,32 +123,44 @@ export default function Register() {
             required
             placeholder="Email address"
             aria-label="Email address"
+            className="w-full px-3 py-2 border rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
             // eslint-disable-next-line jsx-a11y/no-autofocus
             autoFocus
           />
-          <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            autoComplete="current-password"
-            placeholder="Password"
-            aria-label="Password"
-            minLength={8}
-            required
-          />
-          <label htmlFor="passwordConfirm">Re-enter password</label>
-          <input
-            id="passwordConfirm"
-            name="passwordConfirm"
-            type="password"
-            autoComplete="current-password"
-            placeholder="Re-enter password"
-            aria-label="Re-enter password"
-            minLength={8}
-            required
-          />
-        </fieldset>
+          </div>
+          <div>
+            <div className="flex justify-between mb-2">
+              <label for="password" className="text-sm">Password</label>
+            </div>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              placeholder="Password"
+              aria-label="Password"
+              minLength={8}
+              required
+              className="w-full px-3 py-2 border rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+            />
+          </div>
+          <div>
+            <div className="flex justify-between mb-2">
+              <label for="passwordConfirm" className="text-sm">Re-enter password</label>
+            </div>
+            <input
+              id="passwordConfirm"
+              name="passwordConfirm"
+              type="password"
+              autoComplete="current-password"
+              placeholder="Re-enter password"
+              aria-label="Re-enter password"
+              minLength={8}
+              required
+              className="w-full px-3 py-2 border rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+            />
+          </div>
+        </div>
         {error ? (
           <p>
             <mark>
@@ -140,15 +168,28 @@ export default function Register() {
             </mark>
           </p>
         ) : (
-          <br />
+          <p className='hidden'></p>
         )}
-        <button type="submit">Register</button>
-      </Form>
-      <br />
-      <p>
-        <Link to="/account/login">Login →</Link>
-      </p>
+        <div className="space-y-2">
+          <div>
+            <Button type="submit" className="w-full px-8 py-3 font-semibold rounded-md std-btn">Register</Button>
+          </div>
+        </div>
+      </form>
+      </div>
+
+      <div className='w-1/2 sm:block hidden'>
+          <Image
+            src='https://cdn.shopify.com/s/files/1/0570/4335/3681/files/wardrobe-22-2048x1376.png?v=1698391431'
+            className="rounded-2x1"
+            width={616}
+            height={413}
+          />
+        </div>
+      
     </div>
+    </section>
+    
   );
 }
 

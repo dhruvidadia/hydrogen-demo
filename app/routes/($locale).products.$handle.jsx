@@ -1,6 +1,9 @@
-import {Suspense} from 'react';
+import {Suspense, useState} from 'react';
 import {defer, redirect} from '@shopify/remix-oxygen';
 import {Await, Link, useLoaderData} from '@remix-run/react';
+import {ShopPayButton} from '@shopify/hydrogen-react';
+import ProductTabs from '~/components/ProductTabs';
+import Testimonials from '~/components/Testimonials';
 
 import {
   Image,
@@ -18,6 +21,8 @@ export const meta = ({data}) => {
 export async function loader({params, request, context}) {
   const {handle} = params;
   const {storefront} = context;
+
+  const {shop} = await storefront.query(SHOP_URL);
 
   const selectedOptions = getSelectedProductOptions(request).filter(
     (option) =>
@@ -70,7 +75,7 @@ export async function loader({params, request, context}) {
     variables: {handle},
   });
 
-  return defer({product, variants});
+  return defer({product, variants, shop});
 }
 
 function redirectToFirstVariant({product, request}) {
@@ -91,17 +96,56 @@ function redirectToFirstVariant({product, request}) {
 }
 
 export default function Product() {
-  const {product, variants} = useLoaderData();
+  const {product, variants, shop} = useLoaderData();
   const {selectedVariant} = product;
   return (
-    <div className="product">
-      <ProductImage image={selectedVariant?.image} />
-      <ProductMain
-        selectedVariant={selectedVariant}
-        product={product}
-        variants={variants}
-      />
+    <div>
+      <div className="product">
+        <ProductImage image={selectedVariant?.image} />
+        <ProductMain
+          selectedVariant={selectedVariant}
+          product={product}
+          variants={variants}
+          shop={shop}
+        />
+        
+      </div>
+    <ProductTabs product={product} />
+    <CustomBlock />
+    <Testimonials />
+    
     </div>
+    
+  );
+}
+
+function CustomBlock() {
+  return (
+    <section className="bg-white dark:bg-gray-900">
+      <div className="gap-16 items-center px-4 mx-auto max-w-screen-xl lg:grid lg:grid-cols-2 lg:px-6">
+        <div className="mb-4 text-gray-700 dark:text-gray-400">
+              <h2  className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Lorem ipsum dolor sit amet</h2>
+              <p  className="mb-4">We are strategists, designers and developers. Innovators and problem solvers. Small enough to be simple and quick, but big enough to deliver the scope you want at the pace you need. Small enough to be simple and quick, but big enough to deliver the scope you want at the pace you need.</p>
+              <p>We are strategists, designers and developers. Innovators and problem solvers. Small enough to be simple and quick.</p>
+          </div>
+          <div className="grid grid-cols-2 gap-4 mt-8">
+              <Image  className="w-full rounded-lg" src="https://cdn.shopify.com/s/files/1/0570/4335/3681/files/office-long-1.png?v=1698993250" alt="office content 1" width={284} height={394} />
+              <Image  className="mt-4 w-full lg:mt-10 rounded-lg" src="https://cdn.shopify.com/s/files/1/0570/4335/3681/files/office-long-2.png?v=1698993250" alt="office content 2" width={284} height={394}  />
+          </div>
+    </div>
+    <div className="gap-16 items-center px-4 mx-auto max-w-screen-xl lg:grid lg:grid-cols-2  lg:px-6">
+          <div className="grid grid-cols-2 gap-4 mt-8">
+            <Image  className="w-full rounded-lg" src="https://cdn.shopify.com/s/files/1/0570/4335/3681/files/office-long-1.png?v=1698993250" alt="office content 1" width={284} height={394} />
+            <Image  className="mt-4 w-full lg:mt-10 rounded-lg" src="https://cdn.shopify.com/s/files/1/0570/4335/3681/files/office-long-2.png?v=1698993250" alt="office content 2" width={284} height={394}  />
+        </div>
+        <div className="mb-4 text-gray-700 dark:text-gray-400">
+              <h2  className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Lorem ipsum dolor sit amet</h2>
+              <p  className="mb-4">We are strategists, designers and developers. Innovators and problem solvers. Small enough to be simple and quick, but big enough to deliver the scope you want at the pace you need. Small enough to be simple and quick, but big enough to deliver the scope you want at the pace you need.</p>
+              <p>We are strategists, designers and developers. Innovators and problem solvers. Small enough to be simple and quick.</p>
+          </div>
+          
+    </div>
+  </section>
   );
 }
 
@@ -122,19 +166,83 @@ function ProductImage({image}) {
   );
 }
 
-function ProductMain({selectedVariant, product, variants}) {
+function ProductMain({selectedVariant, product, variants,shop}) {
+  const [Qty, setQty] = useState(1);
+  const prevQty = Number(Math.max(0, Qty - 1).toFixed(0));
+  const nextQty = Number((Qty + 1).toFixed(0));
+
   const {title, descriptionHtml} = product;
   return (
     <div className="product-main">
-      <h1>{title}</h1>
-      <ProductPrice selectedVariant={selectedVariant} />
-      <br />
+      
+      <h2 className="mt-2 mb-6 text-xl font-bold dark:text-gray-300 md:text-3xl">{title} <span className="text-lg font-medium text-rose-500 dark:text-rose-200">New</span></h2>
+      
+      <div className="mb-4 text-gray-700 dark:text-gray-400" dangerouslySetInnerHTML={{__html: descriptionHtml}} />
+     
+      <div className="p-4 mb-8 border border-gray-300 dark:border-gray-700">
+          <h2 className="mb-4 text-xl font-semibold dark:text-gray-400">Real time <span
+                  className="px-2 bg-[#0a56a5] text-gray-50">26</span>
+                  visitors right now! </h2>
+          <div className="mb-1 text-xs font-medium text-gray-700 dark:text-gray-400">
+              Hurry up! very few left in Stock
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2.5  dark:bg-gray-600">
+              <div className="bg-[#0a56a5] dark:bg-[#0a56a5] h-2.5 rounded-full" style={{width: '45%'}}>
+              </div>
+          </div>
+      </div>
+      <div className='flex items-center'>
+        <ProductPrice selectedVariant={selectedVariant} />
+        <div className="flex flex-wrap items-center px-10">
+          <div className="mb-4 mr-4 lg:mb-0">
+              <div className="w-28">
+                  <div className="relative flex flex-row h-10 bg-transparent rounded-lg">   
+                      <span className='text-l font-semibold dark:text-gray-400 mr-2'>Qty: </span>      
+                      <div className="cart-line-quantiy">
+                      <div className='flex flex-row relative bg-transparent text-gray-700 items-center justify-items rounded-lg'>
+                        <button
+                          aria-label="Decrease quantity"
+                          disabled={Qty <= 1}
+                          name="decrease-quantity"
+                          value={prevQty}
+                          onClick={() => setQty((Qty) => Qty - 1)}
+                          className='bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400  cursor-pointer outline-none'
+                        >
+                          <span className="m-auto text-2xl font-thin">−</span>
+                        </button>
+                      &nbsp;
+                      <span className='px-4'>{Qty}</span>
+                      &nbsp;
+                      
+                        <button
+                          aria-label="Increase quantity"
+                          name="increase-quantity"
+                          value={nextQty}
+                          onClick={() => setQty((Qty) => Qty + 1)}
+                          className='bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400  cursor-pointer outline-none'
+                        >
+                          <span className="m-auto text-2xl font-thin">+</span>
+                        </button>
+                      </div>
+                    </div>
+                      {/* <LineQty quantity={Qty} />             */}
+                      {/* <input type="number"
+                          className="flex items-center w-full font-semibold text-center text-gray-700 placeholder-gray-700 bg-gray-100 outline-none dark:text-gray-400 dark:placeholder-gray-400 dark:bg-[#0a56a5] focus:outline-none text-md hover:text-black"
+                          placeholder='1' min="1" name='qty' onClick={() => setQty((Qty) => Qty + 1)} /> */}
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div>
+      
       <Suspense
         fallback={
           <ProductForm
             product={product}
             selectedVariant={selectedVariant}
             variants={[]}
+            shop={shop}
+            qty = {Qty}
           />
         }
       >
@@ -147,104 +255,183 @@ function ProductMain({selectedVariant, product, variants}) {
               product={product}
               selectedVariant={selectedVariant}
               variants={data.product?.variants.nodes || []}
+              shop={shop}
+              qty = {Qty}
             />
           )}
         </Await>
       </Suspense>
-      <br />
-      <br />
-      <p>
-        <strong>Description</strong>
-      </p>
-      <br />
-      <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
-      <br />
+  
+      
+    </div>
+  );
+}
+
+function LineQty({quantity}) {
+  
+  const prevQty = Number(Math.max(0, quantity - 1).toFixed(0));
+  const nextQty = Number((quantity + 1).toFixed(0));
+
+  return (
+    <div className="cart-line-quantiy mt-2">
+      <div className='flex flex-row relative bg-transparent text-gray-700 items-center justify-items rounded-lg'>
+        <button
+          aria-label="Decrease quantity"
+          disabled={quantity <= 1}
+          name="decrease-quantity"
+          value={prevQty}
+          onClick={() => setQty((quantity) => quantity - 1)}
+          className='bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400  cursor-pointer outline-none'
+        >
+          <span className="m-auto text-2xl font-thin">−</span>
+        </button>
+      &nbsp;
+      <span className='px-4'>{quantity}</span>
+      &nbsp;
+      
+        <button
+          aria-label="Increase quantity"
+          name="increase-quantity"
+          value={nextQty}
+          onClick={() => setQty((quantity) => quantity + 1)}
+          className='bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400  cursor-pointer outline-none'
+        >
+          <span className="m-auto text-2xl font-thin">+</span>
+        </button>
+      </div>
     </div>
   );
 }
 
 function ProductPrice({selectedVariant}) {
   return (
-    <div className="product-price">
+    <div className="product-price pb-3">
       {selectedVariant?.compareAtPrice ? (
         <>
-          <p>Sale</p>
-          <br />
-          <div className="product-price-on-sale">
+        <p className="inline-block text-2xl font-semibold text-black dark:text-black ">
+        {selectedVariant ? <Money className='inline-block' data={selectedVariant.price} /> : null}
+            <span
+                className="inline-block text-base font-normal text-red-600 line-through dark:text-red-600 p-2"><Money data={selectedVariant.compareAtPrice} /></span>
+        </p>
+          {/* <div className="product-price-on-sale">
             {selectedVariant ? <Money data={selectedVariant.price} /> : null}
             <s>
               <Money data={selectedVariant.compareAtPrice} />
             </s>
-          </div>
+          </div> */}
         </>
       ) : (
-        selectedVariant?.price && <Money data={selectedVariant?.price} />
+        <p className="inline-block text-2xl font-semibold text-black dark:text-black ">  <Money data={selectedVariant?.price} /> </p>
       )}
     </div>
   );
 }
 
-function ProductForm({product, selectedVariant, variants}) {
+function ProductForm({product, selectedVariant, variants,shop, qty}) {
   return (
     <div className="product-form">
-      <VariantSelector
-        handle={product.handle}
-        options={product.options}
-        variants={variants}
-      >
-        {({option}) => <ProductOptions key={option.name} option={option} />}
-      </VariantSelector>
-      <br />
-      <AddToCartButton
-        disabled={!selectedVariant || !selectedVariant.availableForSale}
-        onClick={() => {
-          window.location.href = window.location.href + '#cart-aside';
-        }}
-        lines={
-          selectedVariant
-            ? [
-                {
-                  merchandiseId: selectedVariant.id,
-                  quantity: 1,
-                },
-              ]
-            : []
-        }
-      >
-        {selectedVariant?.availableForSale ? 'Add to cart' : 'Sold out'}
-      </AddToCartButton>
+      { variants.length > 1 && (
+        <div>
+      <div className='pb-4 mb-6 border-b border-gray-300 dark:border-gray-700' ></div>
+        <VariantSelector
+          handle={product.handle}
+          options={product.options}
+          variants={variants}
+        > 
+          {({option}) => <ProductOptions key={option.name} option={option} />}
+        </VariantSelector>
+      </div>
+      )}
+      <div className='pb-4 mb-6 border-b border-gray-300 dark:border-gray-700' ></div>
+      <div className='flex'>
+        <AddToCartButton
+          disabled={!selectedVariant || !selectedVariant.availableForSale}
+          onClick={() => {
+            window.location.href = window.location.href + '#cart-aside';
+          }}
+          lines={
+            selectedVariant
+              ? [
+                  {
+                    merchandiseId: selectedVariant.id,
+                    quantity: qty,
+                  },
+                ]
+              : []
+          }
+        >
+          {selectedVariant?.availableForSale ? 'Add to cart' : 'Sold out'}
+        </AddToCartButton>
+        {selectedVariant.availableForSale && (
+          <ShopPayButton
+            className='px-4'
+            storeDomain={shop.primaryDomain.url}
+            variantIds={[selectedVariant?.id]}
+            width={'400px'}
+          />
+        )}
+      </div>
     </div>
   );
 }
 
 function ProductOptions({option}) {
   return (
-    <div className="product-options" key={option.name}>
-      <h5>{option.name}</h5>
-      <div className="product-options-grid">
+    <div className="pb-6 mb-4 dark:border-gray-700" key={option.name}>
+      <h2 className="mb-2 text-xl font-bold dark:text-gray-400">{option.name}</h2>
+      <div className="flex flex-wrap -mb-2">
         {option.values.map(({value, isAvailable, isActive, to}) => {
+          const lowerval = value.toLowerCase();
           return (
-            <Link
-              className="product-options-item"
-              key={option.name + value}
-              prefetch="intent"
-              preventScrollReset
-              replace
-              to={to}
-              style={{
-                border: isActive ? '1px solid black' : '1px solid transparent',
-                opacity: isAvailable ? 1 : 0.3,
-              }}
+            <div className={`capitalize text-center py-1 mb-2 w-11 hover:border-blue-400 dark:border-[#0a56a5] hover:text-[#0a56a5] dark:hover:border-gray-300 dark:text-gray-400 hover:no-underline ${
+              option.name != 'Color' ? "mr-1 border border-gray-400" : ""
+            } `}
+
+            style={
+              {
+              border: isActive && option.name != 'Color'  ? '3px solid #0a56a5' : '',
+              opacity: isAvailable ? 1 : 0.3,
+            }}
+            key={'main-'+option.name}
             >
-              {value}
-            </Link>
+              {option.name == 'Color' ? (
+                <Link
+                  className=''
+                  key={option.name + value}
+                  prefetch="intent"
+                  preventScrollReset
+                  replace
+                  to={to}
+                  
+                >
+                  <div className="border border-gray-400 rounded-full w-8 h-8 rounded-full hover:opacity-[0.8]" style={
+                    {
+                      backgroundColor: lowerval,
+                      border: isActive ? '3px solid #0a56a5': '' 
+                    }}></div>
+              </Link>
+              ) : <>
+                <Link
+                  key={option.name + value}
+                  prefetch="intent"
+                  preventScrollReset
+                  replace
+                  to={to}
+                  
+                >
+                  {value}
+              </Link>
+              </> 
+              }
+                
+            </div>
+            
           );
         })}
       </div>
-      <br />
     </div>
   );
-}
+}fetch
 
 function AddToCartButton({analytics, children, disabled, lines, onClick}) {
   return (
@@ -260,8 +447,12 @@ function AddToCartButton({analytics, children, disabled, lines, onClick}) {
             type="submit"
             onClick={onClick}
             disabled={disabled ?? fetcher.state !== 'idle'}
+            className="flex flex-row items-center justify-center border border-[#0a56a5] rounded-sm w-full px-4 py-2 text-white bg-[#0a56a5] uppercase shadow-sm hover:bg-[#0a56a5] hover:no-underline shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none"
           >
-            {children}
+            <svg className="mr-3 w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
+              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9V4a3 3 0 0 0-6 0v5m9.92 10H2.08a1 1 0 0 1-1-1.077L2 6h14l.917 11.923A1 1 0 0 1 15.92 19Z"/>
+            </svg>
+            <span>{children}</span>
           </button>
         </>
       )}
@@ -318,6 +509,19 @@ const PRODUCT_FRAGMENT = `#graphql
       name
       values
     }
+    Specifications: metafield(namespace: "custom", key: "details") {
+      value
+      type
+    }
+    Material: metafield(namespace: "custom", key: "material") {
+      value
+      type
+    }
+    Features: metafield(namespace: "custom", key: "features") {
+      value
+      type
+    }
+   
     selectedVariant: variantBySelectedOptions(selectedOptions: $selectedOptions) {
       ...ProductVariant
     }
@@ -331,7 +535,7 @@ const PRODUCT_FRAGMENT = `#graphql
       title
     }
   }
-  ${PRODUCT_VARIANT_FRAGMENT}
+  ${PRODUCT_VARIANT_FRAGMENT} 
 `;
 
 const PRODUCT_QUERY = `#graphql
@@ -348,6 +552,14 @@ const PRODUCT_QUERY = `#graphql
   ${PRODUCT_FRAGMENT}
 `;
 
+const SHOP_URL = `#graphql
+query {
+  shop {
+    primaryDomain {
+      url
+    }
+  }
+}`;
 const PRODUCT_VARIANTS_FRAGMENT = `#graphql
   fragment ProductVariants on Product {
     variants(first: 250) {

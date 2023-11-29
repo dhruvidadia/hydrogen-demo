@@ -156,7 +156,7 @@ aside li {
   @media (min-width: 45em) {
     display: flex;
     grid-gap: 1rem;
-    margin-left: 3rem;
+    /* margin-left: 3rem; */
   }
 }
 
@@ -375,6 +375,11 @@ aside li {
   width: 100%;
 }
 
+.std-btn{
+  background-color: #0a56a5;
+  color: white;
+}
+
 /*
 * --------------------------------------------------
 * routes/products.$handle.tsx
@@ -427,6 +432,14 @@ aside li {
   padding: 0.25rem 0.5rem;
 }
 
+.product-des {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
 /*
 * --------------------------------------------------
 * routes/blog._index.tsx
@@ -470,4 +483,269 @@ aside li {
 
 .account-logout {
   display: inline-block;
+}
+
+
+/*
+* --------------------------------------------------
+* Header navigation
+* --------------------------------------------------
+*/
+
+/* header nav > .top-menu {
+  position: relative;
+}
+
+header nav > .top-menu > .drop-down {
+  position: absolute;
+  margin-top: 12px;
+  background-color: white;
+  width: max-content;
+  padding: 14px;
+  opacity: 0;
+  visibility: hidden;
+  z-index: -1;
+}
+
+header nav > .top-menu > .drop-down > a {
+  display: block;
+  padding: 8px 0;
+}
+
+header nav > .top-menu.active > .drop-down {
+  opacity: 1;
+  visibility: visible;
+  z-index: 1;
+} */
+
+.mega-menu-full-image-dropdown {
+  opacity: 0;
+  visibility: hidden;
+  z-index: -1;
+}
+
+.mega-menu-full-image-dropdown.active {
+  opacity: 1;
+  visibility: visible;
+  z-index: 1;
+}
+
+.top-level-nav{
+  z-index: 2;
+}
+.header{
+  z-index: 3;
+}
+
+
+/* Ruby Menu CSS */
+
+div.ruby-menu-demo-header {
+  position: relative;
+  left: 0;
+  top: 0;
+  height: auto;
+  padding: 0;
+  margin: 0;
+  z-index: 99999
+}
+
+
+/* main */
+
+li.sub-menu-items {
+  margin-bottom: 0;
+}
+
+ul.sub-menu{
+  position: absolute;
+  -webkit-box-shadow: 0 8px 24px -5px #ccc;
+  -moz-box-shadow: 0 8px 24px -5px #ccc;
+  box-shadow: 0 8px 24px -5px #ccc;
+  border-top: 4px solid #0a56a5
+}
+
+a.sub-menu-links {
+  display: block;
+  width: 170px;
+  line-height: 40px;
+  padding: 0 35px 0 25px;
+  background: #fff;
+  color: #4e4a4a;
+  text-decoration: none;
+  font-size: 14px;
+
+  &:hover {
+    background: #d4d3d3;
+  }
+
+}
+
+
+
+@media(min-width: 768px) {
+  ul.ruby-menu > li > ul,ul.ruby-menu > li > ul > li > ul {
+      visibility: hidden;
+      opacity: 0
+  }
+
+  ul.ruby-menu > li:hover > ul,ul.ruby-menu > li > ul > li:hover > ul{
+      visibility: visible;
+      opacity: 1
+  }
+  ul.ruby-menu > li:hover > a:after {
+      -webkit-transform: rotate(-180deg);
+      -moz-transform: rotate(-180deg);
+      -o-transform: rotate(-180deg);
+      -ms-transform: rotate(-180deg);
+      transform: rotate(-180deg)
+  }
+}
+
+
+
+/* RUBY Blog menu */
+
+ul.ruby-menu > li.ruby-menu-mega > div,ul.ruby-menu > li.ruby-menu-mega-blog > div,ul.ruby-menu > li.ruby-menu-mega-shop > div {
+  position: absolute;
+  width: 100%;
+  height: auto;
+  top: 50px;
+  left: 0;
+  background: #fff;
+  overflow: hidden;
+  -webkit-box-shadow: 0 8px 24px -5px #ccc;
+  -moz-box-shadow: 0 8px 24px -5px #ccc;
+  box-shadow: 0 8px 24px -5px #ccc
+}
+
+ul.ruby-menu > li.ruby-menu-mega-blog > div > ul.ruby-menu-mega-blog-nav {
+  position: relative;
+  width: 200px;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background: #efefef
+}
+
+ul.ruby-menu > li.ruby-menu-mega-blog > div > ul.ruby-menu-mega-blog-nav > li > a {
+  display: block;
+  line-height: 40px;
+  padding: 0 15px;
+  background: #efefef;
+  color: #666;
+  text-decoration: none
+}
+
+ul.ruby-menu > li.ruby-menu-mega-blog > div > ul.ruby-menu-mega-blog-nav > li > div {
+  position: absolute;
+  width: 780px;
+  height: auto;
+  min-height: 100%;
+  left: 200px;
+  top: 0;
+  background: #fff
+}
+
+ul.ruby-menu > li.ruby-menu-mega-blog > div > ul.ruby-menu-mega-blog-nav > li > div {
+  transform: translateY(-50px);
+  transition: all .5s ease
+}
+
+ul.ruby-menu > li.ruby-menu-mega-blog:hover > div > ul.ruby-menu-mega-blog-nav > li.ruby-active-menu-item > div,ul.ruby-menu > li.ruby-menu-mega-blog > div > ul.ruby-menu-mega-blog-nav > li:hover > div {
+  transform: translateY(0)
+}
+
+ul.ruby-menu.ruby-vertical > li.ruby-menu-mega-blog > div > ul.ruby-menu-mega-blog-nav > li > div {
+  transform: translateX(50px);
+  transition: all .5s ease
+}
+
+ul.ruby-menu.ruby-vertical > li.ruby-menu-mega-blog:hover > div > ul.ruby-menu-mega-blog-nav > li.ruby-active-menu-item > div,ul.ruby-menu.ruby-vertical > li.ruby-menu-mega-blog > div > ul.ruby-menu-mega-blog-nav > li:hover > div {
+  transform: translateX(0)
+}
+ul.ruby-menu > li.ruby-menu-mega > div,ul.ruby-menu > li.ruby-menu-mega-blog > div,ul.ruby-menu > li.ruby-menu-mega-shop > div {
+  visibility: hidden;
+  opacity: 0
+}
+
+ul.ruby-menu > li.ruby-menu-mega:hover > div,ul.ruby-menu > li.ruby-menu-mega-blog:hover > div,ul.ruby-menu > li.ruby-menu-mega-shop:hover > div {
+  visibility: visible;
+  opacity: 1
+}
+
+ul.ruby-menu > li.ruby-menu-mega-blog > div > ul.ruby-menu-mega-blog-nav > li > div {
+  visibility: hidden;
+  opacity: 0
+}
+
+ul.ruby-menu > li.ruby-menu-mega-blog:hover > div > ul.ruby-menu-mega-blog-nav > li.ruby-active-menu-item > div {
+  visibility: visible;
+  opacity: 1
+}
+
+ul.ruby-menu > li.ruby-menu-mega-blog > div > ul.ruby-menu-mega-blog-nav > li:hover > div {
+  visibility: visible;
+  opacity: 1;
+  z-index: 101
+}
+
+div.ruby-grid > div.ruby-row [class^="ruby-col"] {
+  position: relative;
+  float: left;
+  height: auto
+}
+
+div.ruby-grid > div.ruby-row > [class^="ruby-col"] {
+  padding: 16px
+}
+
+div.ruby-grid > div.ruby-row > [class^="ruby-col"] [class^="ruby-col"] {
+  padding-left: 16px
+}
+
+div.ruby-grid > div.ruby-row div.ruby-col-3 {
+  width: 25%
+}
+
+div.ruby-grid > div.ruby-row div.ruby-col-4 {
+  width: 33.33%
+}
+
+div.ruby-grid > div.ruby-row div.ruby-col-5 {
+  width: 41.66%
+}
+
+div.ruby-grid > div.ruby-row div.ruby-col-6 {
+  width: 50%
+}
+
+div.ruby-grid > div.ruby-row div.ruby-col-8 {
+  width: 66.66%
+}
+
+div.ruby-grid > div.ruby-row div.ruby-col-9 {
+  width: 75%
+}
+
+div.ruby-grid.ruby-grid-lined > div.ruby-row > div[class^="ruby-col"]:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  right: 0;
+  background: -webkit-linear-gradient(top,rgba(204,204,204,0) 0%,rgba(204,204,204,0.48) 24%,rgba(204,204,204,1) 50%,rgba(204,204,204,0.42) 79%,rgba(204,204,204,0) 100%)
+}
+
+div.ruby-wrapper {
+  position: relative;
+  width: 980px;
+  height: 50px;
+  margin: 0 auto;
+}
+
+ul.ruby-menu > li > a {
+  display: block;
+  line-height: 50px;
 }

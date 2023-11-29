@@ -162,6 +162,7 @@ export const CUSTOMER_FRAGMENT = `#graphql
         hasNextPage
         hasNextPage
         endCursor
+        startCursor
       }
     }
   }
