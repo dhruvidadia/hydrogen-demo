@@ -2,7 +2,7 @@ import {json} from '@shopify/remix-oxygen';
 import {Link, useLoaderData} from '@remix-run/react';
 
 export const meta = ({data}) => {
-  return [{title: `Hydrogen | ${data.policy.title}`}];
+  return [{title: `Coconut | ${data.policy.title}`}];
 };
 
 export async function loader({params, context}) {

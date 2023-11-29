@@ -10,9 +10,9 @@ export function Header({header, isLoggedIn, cart}) {
     <header className="header">
       <NavLink className="flex w-full text-center" prefetch="intent" to="/" style={activeLinkStyle} end>        
           <Image 
-              src='https://cdn.shopify.com/s/files/1/0570/4335/3681/files/vt-logo_bd64f491-e33c-43e8-83e4-1ff6a4ebd7bc.png?v=1698735829'
+              src='https://cdn.shopify.com/s/files/1/0570/4335/3681/files/appareldesign.png?v=1701253945'
               alt='Vt Logo'
-              width={180}
+              width={160}
             />
         </NavLink>
       {/* <HeaderMenu menu={menu} viewport="desktop" /> */}

@@ -4,7 +4,7 @@ import ContactUs from '~/components/ContactUs';
 import Pages from '~/components/Pages';
 
 export const meta = ({data}) => {
-  return [{title: `Hydrogen | ${data.page.title}`}];
+  return [{title: `Coconut | ${data.page.title}`}];
 };
 
 export const action = async ({request, context}) => {

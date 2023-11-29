@@ -15,7 +15,7 @@ import {
 import {getVariantUrl} from '~/utils';
 
 export const meta = ({data}) => {
-  return [{title: `Hydrogen | ${data.product.title}`}];
+  return [{title: `Coconut | ${data.product.title}`}];
 };
 
 export async function loader({params, request, context}) {
@@ -112,7 +112,7 @@ export default function Product() {
       </div>
     <ProductTabs product={product} />
     <CustomBlock />
-    <Testimonials />
+    {/* <Testimonials /> */}
     
     </div>
     
@@ -180,9 +180,9 @@ function ProductMain({selectedVariant, product, variants,shop}) {
       <div className="mb-4 text-gray-700 dark:text-gray-400" dangerouslySetInnerHTML={{__html: descriptionHtml}} />
      
       <div className="p-4 mb-8 border border-gray-300 dark:border-gray-700">
-          <h2 className="mb-4 text-xl font-semibold dark:text-gray-400">Real time <span
-                  className="px-2 bg-[#0a56a5] text-gray-50">26</span>
-                  visitors right now! </h2>
+          <h2 className="mb-4 text-xl font-semibold dark:text-gray-400">Spooky discount <span
+                  className="px-2 bg-[#0a56a5] text-gray-50">10% off</span>
+                  </h2>
           <div className="mb-1 text-xs font-medium text-gray-700 dark:text-gray-400">
               Hurry up! very few left in Stock
           </div>

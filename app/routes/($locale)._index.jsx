@@ -16,7 +16,7 @@ import QuickView from '~/components/QuickView';
 import ThumbSlider from '~/components/ThumbSlider';
 
 export const meta = () => {
-  return [{title: 'Hydrogen | Home'}];
+  return [{title: 'Coconut | Home'}];
 };
 
 export const action = async ({request,context}) => {

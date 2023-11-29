@@ -1,6 +1,7 @@
 import {useMatches, NavLink, Link} from '@remix-run/react';
 import {useLoaderData} from '@remix-run/react';
 import NewsletterForm from './NewsletterForm';
+import { Image } from '@shopify/hydrogen';
 export function Footer({menu}) {
   const currentYear = new Date().getFullYear();
   const footerdata = useLoaderData();
@@ -15,26 +16,10 @@ export function Footer({menu}) {
     <div className="container flex flex-col justify-between py-10 mx-auto space-y-8 lg:flex-row lg:space-y-0">
       <div className="lg:w-1/3">
         <a rel="noopener noreferrer" href="#" className="flex justify-center space-x-3 lg:justify-start">
-          <div className="flex items-center justify-center w-12 h-12 rounded-full dark:bg-violet-400 hover:no-underline">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" className="flex-shrink-0 w-5 h-5 rounded-full dark:text-gray-900">
-            <g transform="translate(0.000000,32.000000) scale(0.100000,-0.100000)"
-              fill="#000000" stroke="none">
-              <path d="M106 266 c-14 -29 -44 -74 -66 -99 -55 -62 -34 -69 24 -7 44 47 106
-              136 106 152 0 4 -8 8 -19 8 -13 0 -27 -17 -45 -54z"/>
-              <path d="M170 252 c-15 -35 -47 -80 -82 -117 -58 -59 -68 -75 -47 -75 19 0
-              143 132 173 184 23 39 26 50 15 57 -25 16 -34 9 -59 -49z"/>
-              <path d="M62 284 c-22 -15 -69 -94 -56 -94 7 0 41 41 67 82 22 32 20 34 -11
-              12z"/>
-              <path d="M231 216 c-22 -45 -51 -83 -97 -125 -36 -32 -61 -62 -55 -65 13 -9
-              173 144 196 188 18 32 18 37 4 51 -14 15 -19 10 -48 -49z"/>
-              <path d="M288 173 c-21 -36 -105 -120 -140 -141 -30 -18 -36 -32 -14 -32 30 0
-              186 155 186 185 0 23 -14 18 -32 -12z"/>
-              <path d="M255 44 c-19 -15 -22 -21 -9 -15 18 9 52 41 43 41 -2 0 -17 -12 -34
-              -26z"/>
-              </g>
-            </svg>
-          </div>
-          <span className="self-center text-2xl font-semibold">VT Netzwelt</span>
+          
+            <Image src="https://cdn.shopify.com/s/files/1/0570/4335/3681/files/apparelblack.png?v=1701254383" width={300} />
+          
+          
         </a>
       </div>
       <div className="grid grid-cols-2 text-sm gap-x-3 gap-y-8 lg:w-2/3 sm:grid-cols-4">
@@ -72,7 +57,7 @@ export function Footer({menu}) {
         </div>
       </div>
     </div>
-	<div className="py-6 text-sm text-center dark:text-gray-400">© {currentYear} Vt Netzwelt. All rights reserved.</div>
+	<div className="py-6 text-sm text-center dark:text-gray-400">© {currentYear} Coconut. All rights reserved.</div>
 </footer>
 </>
   );

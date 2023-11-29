@@ -130,10 +130,10 @@ const firstVariant = product?.variants.nodes[0];
                                             }}></div>
                                       </Link>
                                       ) : <>
-                                      {isAvailable ? <><input type="radio" name={option.name} id={option.name + value}  />{value}</> : <p>{value}</p> }
+                                      {/* {isAvailable ? <><input type="radio" name={option.name} id={option.name + value}  />{value}</> : <p>{value}</p> } */}
                                       
                                       {/* <label for={option.name + value}>{value}</label> */}
-                                        {/* <Link
+                                         <Link
                                           key={option.name + value}
                                           prefetch="intent"
                                           preventScrollReset
@@ -142,7 +142,7 @@ const firstVariant = product?.variants.nodes[0];
                                           
                                         >
                                           {value}
-                                      </Link> */}
+                                      </Link> 
                                       </> 
                                       }
                                         
@@ -156,7 +156,8 @@ const firstVariant = product?.variants.nodes[0];
                     </VariantSelector>
                     
                     <div className="justify-center items-center mt-4 mb-4">
-                        <AddToCartButton
+                    
+                        {/* <AddToCartButton
                           disabled={!selectedVariant || !selectedVariant.availableForSale}
                           onClick={() => {
                             window.location.href = window.location.href + '#cart-aside';
@@ -173,7 +174,7 @@ const firstVariant = product?.variants.nodes[0];
                           }
                         >
                           {selectedVariant?.availableForSale ? 'Add to cart' : 'Sold out'}
-                        </AddToCartButton>
+                        </AddToCartButton> */}
                     </div>
                     </div>
                   </div>
@@ -273,10 +274,10 @@ function ProductOptions({option}) {
                     }}></div>
               </Link>
               ) : <>
-              {isAvailable ? <><input type="radio" name={option.name} id={option.name + value} />{value}</> : <p>{value}</p> }
+              {/* {isAvailable ? <><input type="radio" name={option.name} id={option.name + value} />{value}</> : <p>{value}</p> } */}
               
-              {/* <label for={option.name + value}>{value}</label> */}
-                {/* <Link
+              <label for={option.name + value}>{value}</label>
+             <Link
                   key={option.name + value}
                   prefetch="intent"
                   preventScrollReset
@@ -285,7 +286,7 @@ function ProductOptions({option}) {
                   
                 >
                   {value}
-              </Link> */}
+              </Link> 
               </> 
               }
                 

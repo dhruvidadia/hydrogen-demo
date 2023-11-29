@@ -20,7 +20,7 @@ import QuickView from '~/components/QuickView';
 
 
 export const meta = ({data}) => {
-  return [{title: `Hydrogen | ${data.collection.title} Collection`}];
+  return [{title: `Coconut | ${data.collection.title} Collection`}];
 };
 
 
