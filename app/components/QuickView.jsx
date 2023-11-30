@@ -86,7 +86,10 @@ const firstVariant = product?.variants.nodes[0];
                     
                   </div>
                   <div className="sm:col-span-8 lg:col-span-7">
-                    <h2 className="text-xl font-bold text-gray-900 sm:pr-12">{product.title}</h2>
+                  <Link 
+                          to={`/products/${product.handle}`}
+                          className="hover:no-underline"
+                        ><h2 className="text-xl font-bold text-gray-900 sm:pr-12 hover:text-gray-700">{product.title}</h2></Link>
                     <p className="mb-2 text-gray-700 dark:text-gray-400 text-sm">{product.description}</p>
                     <ProductPrice selectedVariant={selectedVariant} product={product} />
                     <div className='pb-4 mb-6 border-b border-gray-300 dark:border-gray-700' ></div>
@@ -97,23 +100,24 @@ const firstVariant = product?.variants.nodes[0];
                         variants={product?.variants.nodes}
                     >   
                         {({option}) =>  <div className="pb-3 dark:border-gray-700" key={option.name}>
-                              <h2 className="text-sm font-bold dark:text-gray-400">{option.name}</h2>
+                              <h2 className="uppercase text-sm font-bold dark:text-gray-400">{option.name}</h2>
                               <div className="flex flex-wrap -mb-2">
                                 {option.values.map(({value, isAvailable, isActive, to}) => {
                                   const lowerval = value.toLowerCase();
+                                  const lowername = option.name.toLowerCase();
                                   return (
-                                    <label className={`capitalize text-center py-1 mb-2 w-11 hover:border-blue-400 dark:border-[#0a56a5] hover:text-[#0a56a5] dark:hover:border-gray-300 dark:text-gray-400 hover:no-underline ${
-                                      option.name != 'Color' ? "mr-1 border border-gray-400" : ""
+                                    <label className={`capitalize text-center py-1 mb-2 w-8 hover:border-blue-400 dark:border-[#0a56a5] hover:text-[#0a56a5] dark:hover:border-gray-300 dark:text-gray-400 hover:no-underline ${
+                                      lowername != 'color' ? "mr-1 border border-gray-400" : ""
                                     } `}
 
                                     style={
                                       {
-                                      border: isActive && option.name != 'Color'  ? '3px solid #0a56a5' : '',
+                                      border: isActive && lowername != 'color'  ? '3px solid #0a56a5' : '',
                                       opacity: isAvailable ? 1 : 0.3,
                                     }}
                                     key={'main-'+option.name+value}
                                     >
-                                      {option.name == 'Color' ? (
+                                      {lowername == 'color' ? (
                                         <Link
                                           className=''
                                           key={option.name + value}
@@ -240,24 +244,23 @@ function ProductPrice({selectedVariant,product}) {
 
 function ProductOptions({option}) {
   return (
-    <div className="pb-3 dark:border-gray-700" key={option.name}>
-      <h2 className="text-sm font-bold dark:text-gray-400">{option.name}</h2>
       <div className="flex flex-wrap -mb-2">
         {option.values.map(({value, isAvailable, isActive, to}) => {
           const lowerval = value.toLowerCase();
+          const lowername = option.name.toLowerCase();
           return (
-            <label className={`capitalize text-center py-1 mb-2 w-11 hover:border-blue-400 dark:border-[#0a56a5] hover:text-[#0a56a5] dark:hover:border-gray-300 dark:text-gray-400 hover:no-underline ${
-              option.name != 'Color' ? "mr-1 border border-gray-400" : ""
+            <label className={`capitalize text-center py-1 mb-2 w-8 hover:border-blue-400 dark:border-[#0a56a5] hover:text-[#0a56a5] dark:hover:border-gray-300 dark:text-gray-400 hover:no-underline ${
+              lowername != 'color' ? "mr-1 border border-gray-400" : ""
             } `}
 
             style={
               {
-              border: isActive && option.name != 'Color'  ? '3px solid #0a56a5' : '',
+              border: isActive && lowername != 'color'  ? '3px solid #0a56a5' : '',
               opacity: isAvailable ? 1 : 0.3,
             }}
             key={'main-'+option.name+value}
             >
-              {option.name == 'Color' ? (
+              {lowername == 'color' ? (
                 <Link
                   className=''
                   key={option.name + value}
@@ -274,19 +277,7 @@ function ProductOptions({option}) {
                     }}></div>
               </Link>
               ) : <>
-              {/* {isAvailable ? <><input type="radio" name={option.name} id={option.name + value} />{value}</> : <p>{value}</p> } */}
               
-              <label for={option.name + value}>{value}</label>
-             <Link
-                  key={option.name + value}
-                  prefetch="intent"
-                  preventScrollReset
-                  replace
-                  to={to}
-                  
-                >
-                  {value}
-              </Link> 
               </> 
               }
                 
@@ -295,7 +286,7 @@ function ProductOptions({option}) {
           );
         })}
       </div>
-    </div>
+    
   );
 }
 

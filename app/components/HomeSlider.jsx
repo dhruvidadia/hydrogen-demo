@@ -5,7 +5,7 @@ import { Image } from '@shopify/hydrogen';
 
 
 // import required modules
-import { EffectCoverflow, Pagination,Navigation } from 'swiper/modules';
+import { EffectCoverflow, Pagination,Navigation, Autoplay } from 'swiper/modules';
 
 const HomeSlider = () => {
     return (
@@ -23,12 +23,13 @@ const HomeSlider = () => {
               modifier: 1,
               slideShadows: true,
             }}
+            autoplay={3000}
             navigation={true}
             pagination={{
               type: 'progressbar',
             }}
             scrollbar={{ draggable: true }}
-            modules={[EffectCoverflow, Pagination, Navigation]}
+            modules={[EffectCoverflow, Pagination, Navigation, Autoplay]}
             className="mySwiper swiper-scrollbar-horizontal"
           >
             <SwiperSlide>

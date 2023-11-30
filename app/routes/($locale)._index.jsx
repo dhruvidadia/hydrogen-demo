@@ -1,7 +1,7 @@
 import {defer, json} from '@shopify/remix-oxygen';
 import {Await, useLoaderData, Link} from '@remix-run/react';
 import {Suspense} from 'react';
-import {Image, Money} from '@shopify/hydrogen';
+import {Image, Money, VariantSelector} from '@shopify/hydrogen';
 import HomeSlider from '~/components/HomeSlider';
 import MasonryCollection from '~/components/MasonryCollection';
 import {
@@ -147,6 +147,57 @@ function RecommendedProducts({products}) {
                         <Money data={product.priceRange.minVariantPrice} />
                       </div>
                     </div>
+                    <VariantSelector
+                        handle={product.handle}
+                        options={product.options}
+                        variants={product?.variants.nodes}
+                    >   
+                        {({option}) => 
+                              
+                              <div className="flex flex-wrap -mb-2">
+                                {option.values.map(({value, isAvailable, isActive, to}) => {
+                                  const lowerval = value.toLowerCase();
+                                  const lowername = option.name.toLowerCase();
+                                  return (
+                                    <div className='mr-1'>
+                                      {lowername == 'color' && (
+                                         <label className={`capitalize text-center py-1 mb-2 w-8 hover:border-blue-400 dark:border-[#0a56a5] hover:text-[#0a56a5] dark:hover:border-gray-300 dark:text-gray-400 hover:no-underline`}
+    
+                                        style={
+                                          {
+                                          border: isActive,
+                                          opacity: isAvailable ? 1 : 0.3,
+                                        }}
+                                        key={'main-'+option.name+value}
+                                        >
+                                          
+                                            <Link
+                                              className=''
+                                              key={option.name + value}
+                                              prefetch="intent"
+                                              preventScrollReset
+                                              replace
+                                              to={to}
+                                              
+                                            >
+                                              <div className="border border-gray-400 rounded-full w-6 h-6 rounded-full hover:opacity-[0.8]" style={
+                                                {
+                                                  backgroundColor: lowerval,
+                                                  border: isActive ? '3px solid #0a56a5': '' 
+                                                }}></div>
+                                          </Link>
+                                           
+                                        </label>
+                                      )}
+                                    </div>
+                                    
+                                  );
+                                })}
+                              </div>
+                            
+                        }
+                    </VariantSelector>
+                    
                   </CardBody>
                     <QuickView product={product} />
                 </Card>
@@ -252,6 +303,7 @@ const RECOMMENDED_PRODUCTS_QUERY = `#graphql
     title
     handle
     description 
+    tags
     priceRange {
       minVariantPrice {
         amount
@@ -291,7 +343,7 @@ const RECOMMENDED_PRODUCTS_QUERY = `#graphql
   }
   query RecommendedProducts ($country: CountryCode, $language: LanguageCode)
     @inContext(country: $country, language: $language) {
-    products(first: 4, sortKey: UPDATED_AT, reverse: true) {
+    products(first: 4, sortKey: UPDATED_AT, reverse: true, query:"tag:recommendedproduct") {
       nodes {
         ...RecommendedProduct
       }

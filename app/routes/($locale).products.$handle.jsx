@@ -97,11 +97,12 @@ function redirectToFirstVariant({product, request}) {
 
 export default function Product() {
   const {product, variants, shop} = useLoaderData();
+  console.log(product)
   const {selectedVariant} = product;
   return (
     <div>
       <div className="product">
-        <ProductImage image={selectedVariant?.image} />
+        <ProductImage image={selectedVariant?.image} thumbnails={product.images?.edges} />
         <ProductMain
           selectedVariant={selectedVariant}
           product={product}
@@ -149,20 +150,42 @@ function CustomBlock() {
   );
 }
 
-function ProductImage({image}) {
+function ProductImage({image,thumbnails}) {
   if (!image) {
     return <div className="product-image" />;
   }
   return (
-    <div className="product-image">
-      <Image
-        alt={image.altText || 'Product Image'}
-        aspectRatio="1/1"
-        data={image}
-        key={image.id}
-        sizes="(min-width: 45em) 50vw, 100vw"
-      />
+    <div class="grid gap-4">
+      <div className="product-image">
+        <Image
+          alt={image.altText || 'Product Image'}
+          aspectRatio="1/1"
+          data={image}
+          key={image.id}
+          sizes="(min-width: 45em) 50vw, 100vw"
+        />
+      </div>
+      {thumbnails && (
+         <div class="grid grid-cols-5 gap-4">
+          {thumbnails.map((img) => {
+            return(
+              <div>
+                <Image
+                alt={'Product Image'}
+                src={img?.node?.url}
+                width={200}
+                height={200}
+              />
+            </div>
+            )
+            
+          })}
+          
+        </div>
+      )}
+     
     </div>
+    
   );
 }
 
@@ -382,19 +405,20 @@ function ProductOptions({option}) {
       <div className="flex flex-wrap -mb-2">
         {option.values.map(({value, isAvailable, isActive, to}) => {
           const lowerval = value.toLowerCase();
+          const lowername = option.name.toLowerCase();
           return (
             <div className={`capitalize text-center py-1 mb-2 w-11 hover:border-blue-400 dark:border-[#0a56a5] hover:text-[#0a56a5] dark:hover:border-gray-300 dark:text-gray-400 hover:no-underline ${
-              option.name != 'Color' ? "mr-1 border border-gray-400" : ""
+              lowername != 'color' ? "mr-1 border border-gray-400" : ""
             } `}
 
             style={
               {
-              border: isActive && option.name != 'Color'  ? '3px solid #0a56a5' : '',
+              border: isActive && lowername != 'color'  ? '3px solid #0a56a5' : '',
               opacity: isAvailable ? 1 : 0.3,
             }}
             key={'main-'+option.name}
             >
-              {option.name == 'Color' ? (
+              {lowername == 'color' ? (
                 <Link
                   className=''
                   key={option.name + value}
@@ -505,6 +529,13 @@ const PRODUCT_FRAGMENT = `#graphql
     handle
     descriptionHtml
     description
+    images(first:8){
+      edges{
+        node{
+          url
+        }
+      }
+    }
     options {
       name
       values

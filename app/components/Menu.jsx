@@ -17,7 +17,7 @@ const Menu = ({menu}) => {
           <>
           {index == 0 ? (
             
-            <li  className="ruby-menu-mega-blog px-2" key={'level-1-'+item.id}><a href="#">{item.title}</a>
+            <li  className="ruby-menu-mega-blog px-2" key={'level-1-'+item.id}><a href={url}>{item.title}</a>
             {item?.items.length > 0 && ( 
               <>
               <div>
