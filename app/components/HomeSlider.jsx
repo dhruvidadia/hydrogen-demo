@@ -23,7 +23,10 @@ const HomeSlider = () => {
               modifier: 1,
               slideShadows: true,
             }}
-            autoplay={3000}
+            autoplay={{
+              delay: 3000,
+              disableOnInteraction: false,
+            }}
             navigation={true}
             pagination={{
               type: 'progressbar',

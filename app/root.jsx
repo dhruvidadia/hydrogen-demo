@@ -24,6 +24,7 @@ import swiper from 'swiper/css';
 import swiperpage from 'swiper/css/pagination';
 import swipernav from 'swiper/css/navigation';
 import swipereffect from 'swiper/css/effect-coverflow';
+import swiperzoom from 'swiper/css/zoom';
 
 // This is important to avoid re-fetching root queries on sub-navigations
 export const shouldRevalidate = ({formMethod, currentUrl, nextUrl}) => {
@@ -50,6 +51,7 @@ export function links() {
     {rel: 'stylesheet', href: swiperpage},
     {rel: 'stylesheet', href: swipernav},
     {rel: 'stylesheet', href: swipereffect},
+    {rel: 'stylesheet', href: swiperzoom},
     {
       rel: 'preconnect',
       href: 'https://cdn.shopify.com',

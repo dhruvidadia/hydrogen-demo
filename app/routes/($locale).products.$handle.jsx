@@ -1,9 +1,12 @@
-import {Suspense, useState} from 'react';
+import {Suspense, useState, useEffect,useRef} from 'react';
 import {defer, redirect} from '@shopify/remix-oxygen';
 import {Await, Link, useLoaderData} from '@remix-run/react';
 import {ShopPayButton} from '@shopify/hydrogen-react';
 import ProductTabs from '~/components/ProductTabs';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import {Zoom, Pagination, Navigation } from 'swiper/modules';
 import Testimonials from '~/components/Testimonials';
+import GallarySlider from '~/components/GallarySlider';
 
 import {
   Image,
@@ -97,12 +100,62 @@ function redirectToFirstVariant({product, request}) {
 
 export default function Product() {
   const {product, variants, shop} = useLoaderData();
-  console.log(product)
   const {selectedVariant} = product;
+  console.log(selectedVariant?.image?.url)
+  const image = selectedVariant?.image;
+  const thumbnails = product.images?.edges;
+  console.log(thumbnails)
+  const swiperRef = useRef(null)
+  useEffect(() => {
+    {thumbnails.map((img,index) => {
+      console.log(index)
+      console.log(selectedVariant?.image?.url)
+      img?.node?.url === selectedVariant?.image?.url ? swiperRef.current.swiper.slideTo(index) : '';
+    })}
+    },[selectedVariant])
   return (
     <div>
       <div className="product">
-        <ProductImage image={selectedVariant?.image} thumbnails={product.images?.edges} />
+        {/* <ProductImage image={selectedVariant?.image} thumbnails={product.images?.edges} /> */}
+        <div className='gap-4 flex md:grid md:grid-cols-2 no-scrollbar scroll-snap-x scroll-smooth h-[485px] md:h-auto place-content-start'>
+          <div className="w-[80vw] md:w-full h-full md:h-auto object-cover object-center flex-shrink-0 md:flex-shrink-none snap-start md:col-span-2 border border-gray-200 rounded-lg">
+            {/* <GallarySlider image={selectedVariant?.image} thumbnails={product.images?.edges} /> */}
+            
+            {thumbnails && (
+                <Swiper
+                slidesPerView={1}
+                spaceBetween={30}
+                pagination={{
+                  clickable: true,
+                }}
+                zoom={true}
+                navigation={true}
+                modules={[Zoom, Pagination, Navigation]}
+                className="mySwiper"
+                ref={swiperRef}
+              >
+                  {thumbnails.map((img) => {
+                    return(
+                      <SwiperSlide>
+                        <div className="swiper-zoom-container">
+                          <Image
+                          alt={'Product Image'}
+                          aspectRatio="1/1"
+                          src={img?.node?.url}
+                          sizes="(min-width: 45em) 50vw, 100vw"
+                          style={{cursor:'move'}}
+                        />
+                      </div>
+                    </SwiperSlide>
+                    )
+                    
+                  })}
+                  
+                  </Swiper>
+              )} 
+          </div>
+        </div>
+        
         <ProductMain
           selectedVariant={selectedVariant}
           product={product}
@@ -155,7 +208,7 @@ function ProductImage({image,thumbnails}) {
     return <div className="product-image" />;
   }
   return (
-    <div class="grid gap-4">
+    <div className="grid gap-4">
       <div className="product-image">
         <Image
           alt={image.altText || 'Product Image'}
@@ -166,7 +219,7 @@ function ProductImage({image,thumbnails}) {
         />
       </div>
       {thumbnails && (
-         <div class="grid grid-cols-5 gap-4">
+         <div className="grid grid-cols-5 gap-4">
           {thumbnails.map((img) => {
             return(
               <div>
@@ -216,7 +269,28 @@ function ProductMain({selectedVariant, product, variants,shop}) {
       </div>
       <div className='flex items-center'>
         <ProductPrice selectedVariant={selectedVariant} />
-        <div className="flex flex-wrap items-center px-10">
+
+        <div className="py-2 px-3 bg-white border border-gray-200 rounded-lg dark:bg-slate-900 dark:border-gray-700" style={{marginLeft: '25px'}}>
+          <div className="w-full flex justify-between items-center gap-x-5">
+            <div className="grow">
+              <span className="block text-xs text-gray-500 dark:text-gray-400">
+                Select quantity
+              </span>
+              <span className='w-full p-0 bg-transparent border-0 text-black-800 focus:ring-0 dark:text-white'>{Qty}</span>
+              {/* <input className="w-full p-0 bg-transparent border-0 text-gray-800 focus:ring-0 dark:text-white" type="text" value={Qty} placeholder="1"  /> */}
+            </div>
+            <div className="flex justify-end items-center gap-x-1.5">
+              <button type="button" className="w-6 h-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-full border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onClick={() => setQty((Qty) => Qty - 1)} name="decrease-quantity" disabled={Qty <= 1}>
+                <svg className="flex-shrink-0 w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/></svg>
+              </button>
+              <button type="button" className="w-6 h-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-full border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" name="increase-quantity" onClick={() => setQty((Qty) => Qty + 1)} >
+                <svg className="flex-shrink-0 w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* <div className="flex flex-wrap items-center px-10">
           <div className="mb-4 mr-4 lg:mb-0">
               <div className="w-28">
                   <div className="relative flex flex-row h-10 bg-transparent rounded-lg">   
@@ -248,14 +322,10 @@ function ProductMain({selectedVariant, product, variants,shop}) {
                         </button>
                       </div>
                     </div>
-                      {/* <LineQty quantity={Qty} />             */}
-                      {/* <input type="number"
-                          className="flex items-center w-full font-semibold text-center text-gray-700 placeholder-gray-700 bg-gray-100 outline-none dark:text-gray-400 dark:placeholder-gray-400 dark:bg-[#0a56a5] focus:outline-none text-md hover:text-black"
-                          placeholder='1' min="1" name='qty' onClick={() => setQty((Qty) => Qty + 1)} /> */}
                   </div>
               </div>
           </div>
-        </div>
+        </div> */}
       </div>
       
       <Suspense
@@ -367,6 +437,7 @@ function ProductForm({product, selectedVariant, variants,shop, qty}) {
       )}
       <div className='pb-4 mb-6 border-b border-gray-300 dark:border-gray-700' ></div>
       <div className='flex'>
+
         <AddToCartButton
           disabled={!selectedVariant || !selectedVariant.availableForSale}
           onClick={() => {
@@ -529,6 +600,51 @@ const PRODUCT_FRAGMENT = `#graphql
     handle
     descriptionHtml
     description
+    media(first: 6) {
+      edges {
+        node {
+          ... on MediaImage {
+            mediaContentType
+            image {
+              id
+              url
+              altText
+              width
+              height
+            }
+          }
+          ... on Video {
+            mediaContentType
+            id
+            previewImage {
+              url
+            }
+            sources {
+              mimeType
+              url
+            }
+          }
+          ... on ExternalVideo {
+            mediaContentType
+            id
+            embedUrl
+            host
+          }
+          ... on Model3d {
+            mediaContentType
+            id
+            alt
+            mediaContentType
+            previewImage {
+              url
+            }
+            sources {
+              url
+            }
+          }
+        }
+      }
+    }
     images(first:8){
       edges{
         node{

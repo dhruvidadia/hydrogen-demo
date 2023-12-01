@@ -26,9 +26,9 @@ const AnnouncementBar = () => {
     // },[countSeconds])
 
     return (
-        <div className="bg-slate-900 flex w-full px-4 py-4 text-center justify-center">
-            <div className="text-white block" ref={refAnnouncementtext}>
-                <p>🚚 Free Shipping on Orders Over $100!</p>
+        <div className="bg-slate-900 flex w-full px-4 py-4 text-center justify-center" id="scroll-container">
+            <div className="text-white block" id="scroll-text" ref={refAnnouncementtext}>
+                <p>🚚 Free Shipping on Orders Over <strong>$100</strong>! Shop Now! #CelebrateWithSavings</p>
             </div>
             {/* <div className="flex w-1/2 justify-end gap-2">
                 <div className="text-white">

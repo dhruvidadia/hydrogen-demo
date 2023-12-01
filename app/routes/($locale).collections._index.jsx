@@ -10,7 +10,7 @@ export async function loader({context, request}) {
   
   
   const paginationVariables = getPaginationVariables(request, {
-    pageBy: 4,
+    pageBy: 6,
   });
 
   const {collections} = await context.storefront.query(COLLECTIONS_QUERY, {
@@ -106,7 +106,7 @@ function CollectionItem({collection, index}) {
             <div className="hidden lg:mt-0 lg:col-span-5 lg:flex relative max-w-md overflow-hidden bg-cover bg-no-repeat">
             <Image
               alt={collection.image.altText || collection.title}
-              aspectRatio="1/1"
+              aspectRatio="2/1"
               data={collection.image}
               className='transition duration-300 ease-in-out hover:scale-110'
               loading={index < 3 ? 'eager' : undefined}
@@ -118,7 +118,7 @@ function CollectionItem({collection, index}) {
             <div className="mr-auto hidden lg:mt-0 lg:col-span-5 lg:flex relative max-w-md overflow-hidden bg-cover bg-no-repeat">
               <Image
                 alt={collection.image.altText || collection.title}
-                aspectRatio="1/1"
+                aspectRatio="2/1"
                 data={collection.image}
                 className='transition duration-300 ease-in-out hover:scale-110'
                 loading={index < 3 ? 'eager' : undefined}
