@@ -101,15 +101,12 @@ function redirectToFirstVariant({product, request}) {
 export default function Product() {
   const {product, variants, shop} = useLoaderData();
   const {selectedVariant} = product;
-  console.log(selectedVariant?.image?.url)
   const image = selectedVariant?.image;
   const thumbnails = product.images?.edges;
-  console.log(thumbnails)
+
   const swiperRef = useRef(null)
   useEffect(() => {
     {thumbnails.map((img,index) => {
-      console.log(index)
-      console.log(selectedVariant?.image?.url)
       img?.node?.url === selectedVariant?.image?.url ? swiperRef.current.swiper.slideTo(index) : '';
     })}
     },[selectedVariant])
