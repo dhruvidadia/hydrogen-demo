@@ -24,12 +24,13 @@ export function Layout({cart, children = null, footer, header, isLoggedIn}) {
 
   return (
     <>
-      <CartAside cart={cart} />
+      
       <SearchAside />
       <MobileMenuAside menu={header.menu} />
       <AnnouncementBar />
       <ScrollToTop />
       <Header header={header} cart={cart} isLoggedIn={isLoggedIn} />
+      <CartAside cart={cart} />
       <main>{children}</main>
       <Suspense>
         <Await resolve={footer}>
