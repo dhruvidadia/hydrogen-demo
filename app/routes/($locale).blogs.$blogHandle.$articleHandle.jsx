@@ -48,7 +48,7 @@ export default function Article() {
       {image && <Image data={image} sizes="90vw" loading="eager" />}
       <div
         dangerouslySetInnerHTML={{__html: contentHtml}}
-        className="article"
+        className="article pt-2"
       />
     </div>
   );

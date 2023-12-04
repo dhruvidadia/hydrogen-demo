@@ -73,20 +73,21 @@ function ArticleItem({article, loading}) {
   }).format(new Date(article.publishedAt));
   return (
     <div className="blog-article" key={article.id}>
-      <Link to={`/blogs/${article.blog.handle}/${article.handle}`}>
+      <Link to={`/blogs/${article.blog.handle}/${article.handle}`} className='hover:no-underline' >
         {article.image && (
-          <div className="blog-article-image">
+          <div className="blog-article-image lg:flex relative overflow-hidden bg-cover bg-no-repeat">
             <Image
               alt={article.image.altText || article.title}
               aspectRatio="3/2"
               data={article.image}
               loading={loading}
               sizes="(min-width: 768px) 50vw, 100vw"
+              className='transition duration-300 ease-in-out hover:scale-110'
             />
           </div>
         )}
-        <h3>{article.title}</h3>
-        <small>{publishedAt}</small>
+        <h3 className='pt-2 relative after:bg-[#0a56a5] py-1 after:absolute after:h-1 after:w-0 after:bottom-0 after:left-0 hover:after:w-full after:transition-all after:duration-300 cursor-pointer'>{article.title}</h3>
+        <small className='relative after:bg-[#0a56a5] py-1 after:absolute after:h-1 after:w-0 after:bottom-0 after:left-0 hover:after:w-full after:transition-all after:duration-300 cursor-pointer'>Read More</small>
       </Link>
     </div>
   );
