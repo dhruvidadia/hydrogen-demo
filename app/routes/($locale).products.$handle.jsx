@@ -486,7 +486,7 @@ function ProductOptions({option}) {
           return (
             <div className={`capitalize text-center justify-center  w-11 hover:border-blue-400 dark:border-[#0a56a5] hover:text-[#0a56a5] dark:hover:border-gray-300 dark:text-gray-400 hover:no-underline ${
               lowername != 'color' ? "mr-1 border border-gray-400 text-xs font-medium x-3 py-0.5 rounded-full" : "py-1 mb-2"
-            }  ${isAvailable ? '' : "disabled"}`}
+            }  ${isAvailable || lowername == 'color' ? '' : "op-disabled"}`}
 
             style={
               {
@@ -495,7 +495,7 @@ function ProductOptions({option}) {
             }}
             key={'main-'+option.name}
             >
-              {lowername == 'color' ? (
+              {lowername == 'color' ? ( 
                 <Link
                   className=''
                   key={option.name + value}
