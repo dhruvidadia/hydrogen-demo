@@ -123,6 +123,14 @@ function RecommendedProducts({products}) {
                     to={`/products/${product.handle}`}
                   >
                   <CardHeader shadow={false} floated={false} className="h-96">
+                  { product.availableForSale ? (
+                    <span class="text-xs font-medium px-3 py-1 rounded-full bg-green-600 text-white ml-2.5">In Stock</span> ) : 
+                    <span class="text-xs font-medium px-3 py-1 rounded-full bg-red-600 text-white ml-2.5">Sold Out</span>
+                  }
+                  { product?.variants?.nodes[0].compareAtPrice?.amount && (
+                    <span class="text-xs font-medium px-3 py-1 rounded-full bg-pink-900 text-white ml-2.5">Sale</span> )
+                  }
+                  
                     <Image
                       data={product.images.nodes[0]}
                       aspectRatio="1/1"
@@ -299,6 +307,7 @@ const FEATURED_COLLECTION_QUERY = `#graphql
 
 const RECOMMENDED_PRODUCTS_QUERY = `#graphql
   fragment RecommendedProduct on Product {
+    availableForSale
     id
     title
     handle
@@ -310,13 +319,21 @@ const RECOMMENDED_PRODUCTS_QUERY = `#graphql
         currencyCode
       }
     }
-    variants(first: 1) {
+    variants(first: 250) {
       nodes {
         id
         availableForSale
         selectedOptions {
           name
           value
+        }
+        price {
+          amount
+          currencyCode
+        }
+        compareAtPrice {
+          amount
+          currencyCode
         }
       } 
     }

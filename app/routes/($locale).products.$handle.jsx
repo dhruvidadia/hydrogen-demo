@@ -99,6 +99,14 @@ function redirectToFirstVariant({product, request}) {
 }
 
 export default function Product() {
+  useEffect(() => {
+    document.documentElement.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth", 
+    });
+  },[])
+
   const {product, variants, shop} = useLoaderData();
   const {selectedVariant} = product;
   const image = selectedVariant?.image;
@@ -110,6 +118,7 @@ export default function Product() {
       img?.node?.url === selectedVariant?.image?.url ? swiperRef.current.swiper.slideTo(index) : '';
     })}
     },[selectedVariant])
+    console.log(product)
   return (
     <div>
       <div className="product">
@@ -475,9 +484,9 @@ function ProductOptions({option}) {
           const lowerval = value.toLowerCase();
           const lowername = option.name.toLowerCase();
           return (
-            <div className={`capitalize text-center py-1 mb-2 w-11 hover:border-blue-400 dark:border-[#0a56a5] hover:text-[#0a56a5] dark:hover:border-gray-300 dark:text-gray-400 hover:no-underline ${
-              lowername != 'color' ? "mr-1 border border-gray-400" : ""
-            } `}
+            <div className={`capitalize text-center justify-center  w-11 hover:border-blue-400 dark:border-[#0a56a5] hover:text-[#0a56a5] dark:hover:border-gray-300 dark:text-gray-400 hover:no-underline ${
+              lowername != 'color' ? "mr-1 border border-gray-400 text-xs font-medium x-3 py-0.5 rounded-full" : "py-1 mb-2"
+            }  ${isAvailable ? '' : "disabled"}`}
 
             style={
               {
@@ -496,7 +505,7 @@ function ProductOptions({option}) {
                   to={to}
                   
                 >
-                  <div className="border border-gray-400 rounded-full w-8 h-8 rounded-full hover:opacity-[0.8]" style={
+                  <div className="border border-gray-400 rounded-full w-8 h-8 rounded-full hover:opacity-[0.8]"  style={
                     {
                       backgroundColor: lowerval,
                       border: isActive ? '3px solid #0a56a5': '' 
@@ -509,6 +518,7 @@ function ProductOptions({option}) {
                   preventScrollReset
                   replace
                   to={to}
+                  className='hover:no-underline'
                   
                 >
                   {value}

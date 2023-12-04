@@ -24,7 +24,7 @@ const firstVariant = product?.variants.nodes[0];
   const {selectedVariant} = product;
   const [open, setOpen] = useState(false)
   const [Current, setCurrent] = useState(selectedVariant.id);
-
+  console.log(product)
   return (
     <>
     <div className="absolute h-full w-full bg-black/20 flex items-center justify-center -bottom-10 hover:bottom-0 opacity-0 hover:opacity-100 transition-all duration-300">
@@ -89,7 +89,8 @@ const firstVariant = product?.variants.nodes[0];
                   <Link 
                           to={`/products/${product.handle}`}
                           className="hover:no-underline"
-                        ><h2 className="text-xl font-bold text-gray-900 sm:pr-12 hover:text-gray-700">{product.title}</h2></Link>
+                        ><h2 className="text-xl font-bold text-gray-900 sm:pr-12 hover:text-gray-700">{product.title} 
+                        {selectedVariant?.compareAtPrice && (<span class="text-sm font-medium text-rose-500 dark:text-rose-200"> Sale</span>)}</h2></Link>
                     <p className="mb-2 text-gray-700 dark:text-gray-400 text-sm">{product.description}</p>
                     <ProductPrice selectedVariant={selectedVariant} product={product} />
                     <div className='pb-4 mb-6 border-b border-gray-300 dark:border-gray-700' ></div>
@@ -106,9 +107,9 @@ const firstVariant = product?.variants.nodes[0];
                                   const lowerval = value.toLowerCase();
                                   const lowername = option.name.toLowerCase();
                                   return (
-                                    <label className={`capitalize text-center py-1 mb-2 w-8 hover:border-blue-400 dark:border-[#0a56a5] hover:text-[#0a56a5] dark:hover:border-gray-300 dark:text-gray-400 hover:no-underline ${
-                                      lowername != 'color' ? "mr-1 border border-gray-400" : ""
-                                    } `}
+                                    <label className={`capitalize text-center justify-center py-1 mb-2 w-8 hover:border-blue-400 dark:border-[#0a56a5] hover:text-[#0a56a5] dark:hover:border-gray-300 dark:text-gray-400 hover:no-underline ${
+                                      lowername != 'color' ? "mr-1 border border-gray-400 text-xs font-medium x-3 py-0.5 rounded-full" : "py-1 mb-2"
+                                    } ${isAvailable ? '' : "disabled"} `}
 
                                     style={
                                       {
@@ -143,7 +144,7 @@ const firstVariant = product?.variants.nodes[0];
                                           preventScrollReset
                                           replace
                                           to={to}
-                                          
+                                          className='hover:no-underline'
                                         >
                                           {value}
                                       </Link> 
@@ -226,13 +227,9 @@ function ProductPrice({selectedVariant,product}) {
     <div className="product-price flex text-md inline-block text-xl font-semibold text-gray-700 dark:text-gray-400 ">
       {selectedVariant?.compareAtPrice ? (
         <>
-          <p>Sale</p>
-          <br />
           <div className="product-price-on-sale">
             {selectedVariant ? <Money data={selectedVariant.price} /> : null}
-            <s>
-              <Money data={selectedVariant.compareAtPrice} />
-            </s>
+            <span class="inline-block text-base font-normal text-red-600 line-through dark:text-red-600 p-1"><Money data={selectedVariant.compareAtPrice} /></span>
           </div>
         </>
       ) : (

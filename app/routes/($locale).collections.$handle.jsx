@@ -137,7 +137,6 @@ function ProductItem({product, loading}) {
 }
 
 function EcommerceCard({product, loading}) {
-  console.log(product)
   const variant = product.variants.nodes[0];
   const variantUrl = useVariantUrl(product.handle, variant.selectedOptions);
   return (
@@ -149,6 +148,13 @@ function EcommerceCard({product, loading}) {
         to={variantUrl}
       >
       <CardHeader shadow={false} floated={false} className="h-96">
+      { product.availableForSale ? (
+        <span class="text-xs font-medium px-3 py-1 rounded-full bg-green-600 text-white">In Stock</span> ) : 
+        <span class="text-xs font-medium px-3 py-1 rounded-full bg-red-600 text-white">Sold Out</span>
+      }
+      { product?.variants?.nodes[0].compareAtPrice?.amount && (
+        <span class="text-xs font-medium px-3 py-1 rounded-full bg-pink-900 text-white ml-2.5">Sale</span> )
+      }
         {product.featuredImage && (
           <Image
             alt={product.featuredImage.altText || product.title}
@@ -156,6 +162,7 @@ function EcommerceCard({product, loading}) {
             data={product.featuredImage}
             loading={loading}
             sizes="(min-width: 45em) 400px, 100vw"
+            className='mt-2'
           />
         )}
       </CardHeader>
@@ -243,6 +250,7 @@ const PRODUCT_ITEM_FRAGMENT = `#graphql
     currencyCode
   }
   fragment ProductItem on Product {
+    availableForSale
     id
     handle
     title
@@ -267,11 +275,20 @@ const PRODUCT_ITEM_FRAGMENT = `#graphql
         ...MoneyProductItem
       }
     }
-    variants(first: 1) {
+    variants(first: 250) {
       nodes {
+        availableForSale
         selectedOptions {
           name
           value
+        }
+        price {
+          amount
+          currencyCode
+        }
+        compareAtPrice {
+          amount
+          currencyCode
         }
       } 
     }

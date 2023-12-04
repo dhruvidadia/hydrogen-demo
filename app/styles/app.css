@@ -793,3 +793,7 @@ ul.ruby-menu > li > a {
     transform: translateX(-100%);
   }
 }
+
+.disabled {
+  background: linear-gradient(to top left,transparent 0,transparent calc(50% - 1px),#999 50%,transparent calc(50% + 1px),transparent),linear-gradient(to top right,transparent 0,transparent calc(50% - 1px),#999 50%,transparent calc(50% + 1px),transparent)!important;
+}
