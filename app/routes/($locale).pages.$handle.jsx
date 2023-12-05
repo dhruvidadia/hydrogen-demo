@@ -2,6 +2,7 @@ import {json} from '@shopify/remix-oxygen';
 import {useLoaderData, useActionData} from '@remix-run/react';
 import ContactUs from '~/components/ContactUs';
 import Pages from '~/components/Pages';
+import ThumbSlider from '~/components/ThumbSlider';
 
 export const meta = ({data}) => {
   return [{title: `Coconut | ${data.page.title}`}];
@@ -59,13 +60,13 @@ export default function Page() {
         <ContactUs msg={showMessage} />
       ) : <>
             <header>
-              <h1>{page.title}</h1>
+              <h1 className="text-center">{page.title}</h1>
             </header>
             <Pages />
             {/* <main dangerouslySetInnerHTML={{__html: page.body}} /> */}
         </>
       }
-      
+      <ThumbSlider />
     </div>
   );
 }

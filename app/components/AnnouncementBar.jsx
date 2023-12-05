@@ -19,15 +19,9 @@ const AnnouncementBar = () => {
         }, 1000);
     },[])
 
-    // useEffect(() => {
-    //     countSeconds % 2 == 0 ? refAnnouncementtext.current.style.setProperty("color","white") : refAnnouncementtext.current.style.setProperty("color","transparent")
-            
-        
-    // },[countSeconds])
-
     return (
         <div className="bg-slate-900 flex w-full px-4 py-4 text-center justify-center" id="scroll-container">
-            <div className="text-white block" id="scroll-text" ref={refAnnouncementtext}>
+            <div className="text-white block" ref={refAnnouncementtext}>
                 <p>🚚 Free Shipping on Orders Over <strong>$100</strong>! Shop Now! #CelebrateWithSavings</p>
             </div>
             {/* <div className="flex w-1/2 justify-end gap-2">

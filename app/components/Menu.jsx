@@ -1,8 +1,4 @@
 
-import React from 'react';
-import { Image } from '@shopify/hydrogen';
-import { Button } from '@material-tailwind/react';
-
 const Menu = ({menu}) => {
     return ( 
     <div  className="ruby-menu-demo-header hidden sm:block">

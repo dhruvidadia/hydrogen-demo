@@ -13,7 +13,8 @@ import {
   Button,
 } from "@material-tailwind/react";
 import QuickView from '~/components/QuickView';
-import ThumbSlider from '~/components/ThumbSlider';
+import Testimonials from '~/components/Testimonials';
+
 
 export const meta = () => {
   return [{title: 'Coconut | Home'}];
@@ -75,7 +76,7 @@ export default function Homepage() {
       <StaticBlock />
       <br />
       <RecommendedProducts products={data.recommendedProducts} />
-      <ThumbSlider />
+      <Testimonials />
     </div>
   );
 }

@@ -8,7 +8,7 @@ export const meta = ({data}) => {
 
 export const loader = async ({request, params, context: {storefront}}) => {
   const paginationVariables = getPaginationVariables(request, {
-    pageBy: 4,
+    pageBy: 8,
   });
 
   if (!params.blogHandle) {
@@ -86,7 +86,7 @@ function ArticleItem({article, loading}) {
             />
           </div>
         )}
-        <h3 className='pt-2 relative after:bg-[#0a56a5] py-1 after:absolute after:h-1 after:w-0 after:bottom-0 after:left-0 hover:after:w-full after:transition-all after:duration-300 cursor-pointer'>{article.title}</h3>
+        <h3 className='pt-2 cursor-pointer'>{article.title}</h3>
         <small className='relative after:bg-[#0a56a5] py-1 after:absolute after:h-1 after:w-0 after:bottom-0 after:left-0 hover:after:w-full after:transition-all after:duration-300 cursor-pointer'>Read More</small>
       </Link>
     </div>

@@ -23,8 +23,7 @@ const firstVariant = product?.variants.nodes[0];
   product.selectedVariant = firstVariant;
   const {selectedVariant} = product;
   const [open, setOpen] = useState(false)
-  const [Current, setCurrent] = useState(selectedVariant.id);
-  console.log(product)
+
   return (
     <>
     <div className="absolute h-full w-full bg-black/20 flex items-center justify-center -bottom-10 hover:bottom-0 opacity-0 hover:opacity-100 transition-all duration-300">
@@ -85,7 +84,7 @@ const firstVariant = product?.variants.nodes[0];
                       </div>
                     
                   </div>
-                  <div className="sm:col-span-8 lg:col-span-7">
+                  <div className="sm:col-span-8 lg:col-span-7 px-5">
                   <Link 
                           to={`/products/${product.handle}`}
                           className="hover:no-underline"
@@ -239,52 +238,5 @@ function ProductPrice({selectedVariant,product}) {
   );
 }
 
-function ProductOptions({option}) {
-  return (
-      <div className="flex flex-wrap -mb-2">
-        {option.values.map(({value, isAvailable, isActive, to}) => {
-          const lowerval = value.toLowerCase();
-          const lowername = option.name.toLowerCase();
-          return (
-            <label className={`capitalize text-center py-1 mb-2 w-8 hover:border-blue-400 dark:border-[#0a56a5] hover:text-[#0a56a5] dark:hover:border-gray-300 dark:text-gray-400 hover:no-underline ${
-              lowername != 'color' ? "mr-1 border border-gray-400" : ""
-            } `}
-
-            style={
-              {
-              border: isActive && lowername != 'color'  ? '3px solid #0a56a5' : '',
-              opacity: isAvailable ? 1 : 0.3,
-            }}
-            key={'main-'+option.name+value}
-            >
-              {lowername == 'color' ? (
-                <Link
-                  className=''
-                  key={option.name + value}
-                  prefetch="intent"
-                  preventScrollReset
-                  replace
-                  to={to}
-                  
-                >
-                  <div className="border border-gray-400 rounded-full w-6 h-6 rounded-full hover:opacity-[0.8]" style={
-                    {
-                      backgroundColor: lowerval,
-                      border: isActive ? '3px solid #0a56a5': '' 
-                    }}></div>
-              </Link>
-              ) : <>
-              
-              </> 
-              }
-                
-            </label>
-            
-          );
-        })}
-      </div>
-    
-  );
-}
 
 export default QuickView;

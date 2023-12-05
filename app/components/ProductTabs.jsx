@@ -133,7 +133,7 @@ const SpecialFeatures = ({ open, tabCategory }) => {
       >
         <ul>
           <li className="flex mb-4 w-full items-cenetr float-left ">
-            <Image src="https://cdn.shopify.com/s/files/1/0570/4335/3681/files/stayfresh_gray.webp?v=1698989332" alt="Stay Fresh" width={50} height={50} />
+            <Image src="https://cdn.shopify.com/s/files/1/0570/4335/3681/files/stayfresh_gray.webp?v=1698989332" className="sm:w-50 sm:h-50" width={50} height={50} alt="Stay Fresh"  />
             <p className="py-4 px-4">StayFresh - This product treated with antimicrobial properties to help you stay fresh throughout the day.</p>
           </li>
           <li className="flex mb-4 w-full items-cenetr float-left  ">

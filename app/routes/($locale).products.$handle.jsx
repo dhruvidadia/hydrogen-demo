@@ -123,7 +123,7 @@ export default function Product() {
     <div>
       <div className="product">
         {/* <ProductImage image={selectedVariant?.image} thumbnails={product.images?.edges} /> */}
-        <div className='gap-4 flex md:grid md:grid-cols-2 no-scrollbar scroll-snap-x scroll-smooth h-[485px] md:h-auto place-content-start'>
+        <div className='gap-4 flex md:grid md:grid-cols-2 md:h-auto place-content-start'>
           <div className="w-[80vw] md:w-full h-full md:h-auto object-cover object-center flex-shrink-0 md:flex-shrink-none snap-start md:col-span-2 border border-gray-200 rounded-lg">
             {/* <GallarySlider image={selectedVariant?.image} thumbnails={product.images?.edges} /> */}
             
@@ -265,13 +265,26 @@ function ProductMain({selectedVariant, product, variants,shop}) {
           <h2 className="mb-4 text-xl font-semibold dark:text-gray-400">Spooky discount <span
                   className="px-2 bg-[#0a56a5] text-gray-50">10% off</span>
                   </h2>
+          { product.availableForSale ? (
+            <>
           <div className="mb-1 text-xs font-medium text-gray-700 dark:text-gray-400">
               Hurry up! very few left in Stock
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2.5  dark:bg-gray-600">
-              <div className="bg-[#0a56a5] dark:bg-[#0a56a5] h-2.5 rounded-full" style={{width: '45%'}}>
-              </div>
+          <div className="bg-[#0a56a5] dark:bg-[#0a56a5] h-2.5 rounded-full" style={{width: '45%'}}></div>
           </div>
+          </>
+          ) :
+          <>
+          <div className="mb-1 text-xs font-medium text-gray-700 dark:text-gray-400">
+          Sorry! we are temporarily out of Stock
+          </div> 
+          <div className="w-full bg-gray-200 rounded-full h-2.5  dark:bg-gray-600">
+              <div className="bg-[#0a56a5] dark:bg-[#0a56a5] h-2.5 rounded-full" style={{width: '99%'}}></div>
+          </div>
+          </> 
+          }
+          
       </div>
       <div className='flex items-center'>
         <ProductPrice selectedVariant={selectedVariant} />
@@ -596,6 +609,7 @@ const PRODUCT_FRAGMENT = `#graphql
     handle
     descriptionHtml
     description
+    availableForSale
     media(first: 6) {
       edges {
         node {
