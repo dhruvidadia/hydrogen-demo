@@ -447,7 +447,7 @@ function ProductForm({product, selectedVariant, variants,shop, qty}) {
         <AddToCartButton
           disabled={!selectedVariant || !selectedVariant.availableForSale}
           onClick={() => {
-            window.location.href = window.location.href + '#cart-aside';
+            setwindow.location.href = window.location.href + '#cart-aside';
           }}
           lines={
             selectedVariant
@@ -484,50 +484,39 @@ function ProductOptions({option}) {
           const lowerval = value.toLowerCase();
           const lowername = option.name.toLowerCase();
           return (
-            <div className={`capitalize text-center justify-center  w-11 hover:border-blue-400 dark:border-[#0a56a5] hover:text-[#0a56a5] dark:hover:border-gray-300 dark:text-gray-400 hover:no-underline ${
+            <Link
+                  className='hover:no-underline'
+                  key={option.name + value}
+                  prefetch="intent"
+                  preventScrollReset
+                  replace
+                  to={to}
+                  
+                >
+            <div className={`capitalize text-center justify-center  w-11 hover:border-blue-400 dark:border-[#0a56a5] hover:text-[#0a56a5] dark:hover:border-gray-300 dark:text-gray-400  ${
               lowername != 'color' ? "mr-1 border border-gray-400 text-xs font-medium x-3 py-0.5 rounded-full" : "py-1 mb-2"
             }  ${isAvailable || lowername == 'color' ? '' : "op-disabled"}`}
 
             style={
               {
               border: isActive && lowername != 'color'  ? '3px solid #0a56a5' : '',
-              opacity: isAvailable ? 1 : 0.3,
-            }}
+              opacity: isAvailable ? 1 : 0.8,
+           }}
             key={'main-'+option.name}
             >
               {lowername == 'color' ? ( 
-                <Link
-                  className=''
-                  key={option.name + value}
-                  prefetch="intent"
-                  preventScrollReset
-                  replace
-                  to={to}
-                  
-                >
                   <div className="border border-gray-400 rounded-full w-8 h-8 rounded-full hover:opacity-[0.8]"  style={
                     {
                       backgroundColor: lowerval,
-                      border: isActive ? '3px solid #0a56a5': '' 
-                    }}></div>
-              </Link>
+                      border: isActive ? '3px solid #0a56a5': '',
+                      cursor: !isAvailable  ? 'not-allowed': '',
+                    }}></div>             
               ) : <>
-                <Link
-                  key={option.name + value}
-                  prefetch="intent"
-                  preventScrollReset
-                  replace
-                  to={to}
-                  className='hover:no-underline'
-                  
-                >
-                  {value}
-              </Link>
+              {value}
               </> 
-              }
-                
+              }                
             </div>
-            
+            </Link>
           );
         })}
       </div>
