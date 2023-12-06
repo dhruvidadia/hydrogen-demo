@@ -14,10 +14,30 @@ const Pages = () => {
         { name: 'Hours per week', value: '40' },
         { name: 'Paid time off', value: 'Unlimited' },
       ]
+      const numbers = [
+        { id: 1, name: 'Transactions every 24 hours', value: '11 million' },
+        { id: 2, name: 'Assets under holding', value: '$19 trillion' },
+        { id: 3, name: 'New users annually', value: '2,000' },
+      ]
       
     return (
       <div className="text-center justify-center">
-          <h5>We're here to prove that fashion can be a force for good.</h5>
+        <h5>We're here to prove that fashion can be a force for good.</h5>
+         <div className="bg-white py-12 sm:py-12">
+            <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                <dl className="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-3">
+                {numbers.map((stat) => (
+                    <div key={stat.id} className="mx-auto flex max-w-xs flex-col gap-y-4">
+                    <dt className="text-base leading-7 text-gray-600">{stat.name}</dt>
+                    <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
+                        {stat.value}
+                    </dd>
+                    </div>
+                ))}
+                </dl>
+            </div>
+            </div>
+          
           {/* <video class="w-full" autoplay muted controls>
             <src src="blob:https://www.youtube.com/e5af867d-55d7-40ab-8eb7-21848f6c6e63" />
             Your browser does not support the video tag.

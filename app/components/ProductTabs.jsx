@@ -132,17 +132,14 @@ const SpecialFeatures = ({ open, tabCategory }) => {
         } `}
       >
         <ul>
-          <li className="flex mb-4 w-full items-cenetr float-left ">
-            <Image src="https://cdn.shopify.com/s/files/1/0570/4335/3681/files/stayfresh_gray.webp?v=1698989332" className="sm:w-50 sm:h-50" width={50} height={50} alt="Stay Fresh"  />
-            <p className="py-4 px-4">StayFresh - This product treated with antimicrobial properties to help you stay fresh throughout the day.</p>
+          <li className="flex w-full items-cenetr float-left ">
+            <p>StayFresh - This product treated with antimicrobial properties to help you stay fresh throughout the day.</p>
           </li>
-          <li className="flex mb-4 w-full items-cenetr float-left  ">
-            <Image src="https://cdn.shopify.com/s/files/1/0570/4335/3681/files/staydry_gray.webp?v=1698989331" alt="Stay Gray" width={50} height={50} />
-            <p className="py-4 px-4">StayDry - This product is treated with StayDry™ technology, with additional evaporation properties to keep you dry throughout the day.</p>
+          <li className="flex w-full items-cenetr float-left  ">
+            <p>StayDry - This product is treated with StayDry™ technology, with additional evaporation properties to keep you dry throughout the day.</p>
           </li>
-          <li className="flex mb-4 w-full items-cenetr float-left   ">
-            <Image src="https://cdn.shopify.com/s/files/1/0570/4335/3681/files/smart_fabric.webp?v=1698989331" alt="Smart Fabric" width={50} height={50} />
-            <p className="py-4 px-4">Smart Fabric - Smart Fabric is used to make this product that takes quality & comfort to the next level.</p>
+          <li className="flex w-full items-cenetr float-left">
+            <p>Smart Fabric - Smart Fabric is used to make this product that takes quality & comfort to the next level.</p>
           </li>
         </ul>
       </div>

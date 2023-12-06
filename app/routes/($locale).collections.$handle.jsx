@@ -182,7 +182,16 @@ function EcommerceCard({product, loading}) {
           
           </Typography>
           <Typography color="blue-gray" className="font-medium">
-            <Money data={product.priceRange.minVariantPrice} />
+          {product?.variants?.nodes[0].compareAtPrice?.amount ? (
+            <>
+              <div className="flex">
+                {product?.variants?.nodes[0].price?.amount ? <Money className='mr-1' data={product?.variants.nodes[0]?.price} /> : null}
+                <span class="inline-block text-base font-normal text-red-600 line-through dark:text-red-600 text-sm mt-1"><Money data={product?.variants?.nodes[0].compareAtPrice} /></span>
+              </div>
+            </>
+          ) : (
+            <Money data={product?.variants.nodes[0]?.price} />
+          )}
           </Typography>
         </div>
         <VariantSelector

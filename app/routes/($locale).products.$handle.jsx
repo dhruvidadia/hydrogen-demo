@@ -1,13 +1,11 @@
 import {Suspense, useState, useEffect,useRef} from 'react';
 import {defer, redirect} from '@shopify/remix-oxygen';
-import {Await, Link, useLoaderData} from '@remix-run/react';
+import {Await, Link, useLoaderData, useActionData} from '@remix-run/react';
 import {ShopPayButton} from '@shopify/hydrogen-react';
 import ProductTabs from '~/components/ProductTabs';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import {Zoom, Pagination, Navigation } from 'swiper/modules';
-import Testimonials from '~/components/Testimonials';
-import GallarySlider from '~/components/GallarySlider';
-
+import {json} from '@shopify/remix-oxygen';
 import {
   Image,
   Money,
@@ -16,10 +14,33 @@ import {
   CartForm,
 } from '@shopify/hydrogen';
 import {getVariantUrl} from '~/utils';
+import { Button } from '@material-tailwind/react';
 
 export const meta = ({data}) => {
   return [{title: `Coconut | ${data.product.title}`}];
 };
+
+    
+export const action = async ({request}) => {
+  if (request.method !== 'POST') {
+      return json({error: 'Method not allowed'}, {status: 405});
+    }
+  
+  const form = await request.formData();
+  const email = String(form.has('email') ? form.get('email') : '');
+  try {
+      return json(
+        {error: null, msg: true},
+      );
+
+  } catch (error) {
+      if (error instanceof Error) {
+        return json({error: error.message}, {status: 400});
+      }
+      return json({error}, {status: 400});
+    }
+}
+
 
 export async function loader({params, request, context}) {
   const {handle} = params;
@@ -109,7 +130,6 @@ export default function Product() {
 
   const {product, variants, shop} = useLoaderData();
   const {selectedVariant} = product;
-  const image = selectedVariant?.image;
   const thumbnails = product.images?.edges;
 
   const swiperRef = useRef(null)
@@ -122,10 +142,8 @@ export default function Product() {
   return (
     <div>
       <div className="product">
-        {/* <ProductImage image={selectedVariant?.image} thumbnails={product.images?.edges} /> */}
         <div className='gap-4 flex md:grid md:grid-cols-2 md:h-auto place-content-start'>
           <div className="w-[80vw] md:w-full h-full md:h-auto object-cover object-center flex-shrink-0 md:flex-shrink-none snap-start md:col-span-2 border border-gray-200 rounded-lg">
-            {/* <GallarySlider image={selectedVariant?.image} thumbnails={product.images?.edges} /> */}
             
             {thumbnails && (
                 <Swiper
@@ -172,8 +190,6 @@ export default function Product() {
       </div>
     <ProductTabs product={product} />
     <CustomBlock />
-    {/* <Testimonials /> */}
-    
     </div>
     
   );
@@ -209,50 +225,8 @@ function CustomBlock() {
   );
 }
 
-function ProductImage({image,thumbnails}) {
-  if (!image) {
-    return <div className="product-image" />;
-  }
-  return (
-    <div className="grid gap-4">
-      <div className="product-image">
-        <Image
-          alt={image.altText || 'Product Image'}
-          aspectRatio="1/1"
-          data={image}
-          key={image.id}
-          sizes="(min-width: 45em) 50vw, 100vw"
-        />
-      </div>
-      {thumbnails && (
-         <div className="grid grid-cols-5 gap-4">
-          {thumbnails.map((img) => {
-            return(
-              <div>
-                <Image
-                alt={'Product Image'}
-                src={img?.node?.url}
-                width={200}
-                height={200}
-              />
-            </div>
-            )
-            
-          })}
-          
-        </div>
-      )}
-     
-    </div>
-    
-  );
-}
-
 function ProductMain({selectedVariant, product, variants,shop}) {
   const [Qty, setQty] = useState(1);
-  const prevQty = Number(Math.max(0, Qty - 1).toFixed(0));
-  const nextQty = Number((Qty + 1).toFixed(0));
-
   const {title, descriptionHtml} = product;
   return (
     <div className="product-main">
@@ -296,7 +270,6 @@ function ProductMain({selectedVariant, product, variants,shop}) {
                 Select quantity
               </span>
               <span className='w-full p-0 bg-transparent border-0 text-black-800 focus:ring-0 dark:text-white'>{Qty}</span>
-              {/* <input className="w-full p-0 bg-transparent border-0 text-gray-800 focus:ring-0 dark:text-white" type="text" value={Qty} placeholder="1"  /> */}
             </div>
             <div className="flex justify-end items-center gap-x-1.5">
               <button type="button" className="w-6 h-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-full border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onClick={() => setQty((Qty) => Qty - 1)} name="decrease-quantity" disabled={Qty <= 1}>
@@ -308,43 +281,6 @@ function ProductMain({selectedVariant, product, variants,shop}) {
             </div>
           </div>
         </div>
-
-        {/* <div className="flex flex-wrap items-center px-10">
-          <div className="mb-4 mr-4 lg:mb-0">
-              <div className="w-28">
-                  <div className="relative flex flex-row h-10 bg-transparent rounded-lg">   
-                      <span className='text-l font-semibold dark:text-gray-400 mr-2'>Qty: </span>      
-                      <div className="cart-line-quantiy">
-                      <div className='flex flex-row relative bg-transparent text-gray-700 items-center justify-items rounded-lg'>
-                        <button
-                          aria-label="Decrease quantity"
-                          disabled={Qty <= 1}
-                          name="decrease-quantity"
-                          value={prevQty}
-                          onClick={() => setQty((Qty) => Qty - 1)}
-                          className='bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400  cursor-pointer outline-none'
-                        >
-                          <span className="m-auto text-2xl font-thin">−</span>
-                        </button>
-                      &nbsp;
-                      <span className='px-4'>{Qty}</span>
-                      &nbsp;
-                      
-                        <button
-                          aria-label="Increase quantity"
-                          name="increase-quantity"
-                          value={nextQty}
-                          onClick={() => setQty((Qty) => Qty + 1)}
-                          className='bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400  cursor-pointer outline-none'
-                        >
-                          <span className="m-auto text-2xl font-thin">+</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-              </div>
-          </div>
-        </div> */}
       </div>
       
       <Suspense
@@ -373,44 +309,6 @@ function ProductMain({selectedVariant, product, variants,shop}) {
           )}
         </Await>
       </Suspense>
-  
-      
-    </div>
-  );
-}
-
-function LineQty({quantity}) {
-  
-  const prevQty = Number(Math.max(0, quantity - 1).toFixed(0));
-  const nextQty = Number((quantity + 1).toFixed(0));
-
-  return (
-    <div className="cart-line-quantiy mt-2">
-      <div className='flex flex-row relative bg-transparent text-gray-700 items-center justify-items rounded-lg'>
-        <button
-          aria-label="Decrease quantity"
-          disabled={quantity <= 1}
-          name="decrease-quantity"
-          value={prevQty}
-          onClick={() => setQty((quantity) => quantity - 1)}
-          className='bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400  cursor-pointer outline-none'
-        >
-          <span className="m-auto text-2xl font-thin">−</span>
-        </button>
-      &nbsp;
-      <span className='px-4'>{quantity}</span>
-      &nbsp;
-      
-        <button
-          aria-label="Increase quantity"
-          name="increase-quantity"
-          value={nextQty}
-          onClick={() => setQty((quantity) => quantity + 1)}
-          className='bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400  cursor-pointer outline-none'
-        >
-          <span className="m-auto text-2xl font-thin">+</span>
-        </button>
-      </div>
     </div>
   );
 }
@@ -425,12 +323,6 @@ function ProductPrice({selectedVariant}) {
             <span
                 className="inline-block text-base font-normal text-red-600 line-through dark:text-red-600 p-2"><Money data={selectedVariant.compareAtPrice} /></span>
         </p>
-          {/* <div className="product-price-on-sale">
-            {selectedVariant ? <Money data={selectedVariant.price} /> : null}
-            <s>
-              <Money data={selectedVariant.compareAtPrice} />
-            </s>
-          </div> */}
         </>
       ) : (
         <p className="inline-block text-2xl font-semibold text-black dark:text-black ">  <Money data={selectedVariant?.price} /> </p>
@@ -440,6 +332,8 @@ function ProductPrice({selectedVariant}) {
 }
 
 function ProductForm({product, selectedVariant, variants,shop, qty}) {
+  const action = useActionData();
+  const showMessage = (action?.msg) ? action.msg : false;
   return (
     <div className="product-form">
       { variants.length > 1 && (
@@ -456,11 +350,11 @@ function ProductForm({product, selectedVariant, variants,shop, qty}) {
       )}
       <div className='pb-4 mb-6 border-b border-gray-300 dark:border-gray-700' ></div>
       <div className='flex'>
-
+      {selectedVariant?.availableForSale ? (
         <AddToCartButton
           disabled={!selectedVariant || !selectedVariant.availableForSale}
           onClick={() => {
-            setwindow.location.href = window.location.href + '#cart-aside';
+            window.location.href = window.location.href + '#cart-aside';
           }}
           lines={
             selectedVariant
@@ -473,16 +367,46 @@ function ProductForm({product, selectedVariant, variants,shop, qty}) {
               : []
           }
         >
-          {selectedVariant?.availableForSale ? 'Add to cart' : 'Sold out'}
-        </AddToCartButton>
-        {selectedVariant.availableForSale && (
+          Add to cart
+        </AddToCartButton> ) : 
+        <>
+        <form method='POST'>
+        <span class="text-sm font-medium me-2  rounded text-rose-500 dark:text-rose-200">Sorry! we are temporarily out of Stock</span>
+            <div className="items-center sm:flex sm:space-y-0 mt-5">
+                <div class="relative z-0">
+                  <input type="email" name="email" id="floating_standard" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required placeholder=" " />
+                  <label for="floating_standard" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Enter your email</label>
+              </div>
+              <div>
+              <Button
+                type="submit"
+                className="flex flex-items items-center ml-3 text-white bg-[#0a56a5] uppercase shadow-sm hover:bg-[#0a56a5] hover:no-underline shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 w-40 h-10 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none"
+              >
+                <svg class="mr-3 w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 21">
+                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 3.464V1.1m0 2.365a5.338 5.338 0 0 1 5.133 5.368v1.8c0 2.386 1.867 2.982 1.867 4.175C17 15.4 17 16 16.462 16H3.538C3 16 3 15.4 3 14.807c0-1.193 1.867-1.789 1.867-4.175v-1.8A5.338 5.338 0 0 1 10 3.464ZM1.866 8.832a8.458 8.458 0 0 1 2.252-5.714m14.016 5.714a8.458 8.458 0 0 0-2.252-5.714M6.54 16a3.48 3.48 0 0 0 6.92 0H6.54Z"/>
+                </svg>
+                <span>Notify Me</span>
+              </Button>
+              </div>
+            </div>
+            { showMessage == true && (
+
+            <div className="mb-4 text-sm text-green-800 rounded-sm dark:bg-gray-800 dark:text-green-400">
+                Thanks! We will notify you soon.
+            </div>
+
+            )}
+          </form>
+        </>
+        }
+        {/* {selectedVariant.availableForSale && (
           <ShopPayButton
             className='px-4'
             storeDomain={shop.primaryDomain.url}
             variantIds={[selectedVariant?.id]}
             width={'400px'}
           />
-        )}
+        )} */}
       </div>
     </div>
   );
@@ -551,7 +475,7 @@ function AddToCartButton({analytics, children, disabled, lines, onClick}) {
             type="submit"
             onClick={onClick}
             disabled={disabled ?? fetcher.state !== 'idle'}
-            className="flex flex-row items-center justify-center border border-[#0a56a5] rounded-sm w-full px-4 py-2 text-white bg-[#0a56a5] uppercase shadow-sm hover:bg-[#0a56a5] hover:no-underline shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none"
+            className="flex flex-row items-center justify-center border border-[#0a56a5] rounded-xl w-full px-8 py-3 text-white bg-[#0a56a5] uppercase shadow-sm hover:bg-[#0a56a5] hover:no-underline shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none"
           >
             <svg className="mr-3 w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
               <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9V4a3 3 0 0 0-6 0v5m9.92 10H2.08a1 1 0 0 1-1-1.077L2 6h14l.917 11.923A1 1 0 0 1 15.92 19Z"/>
