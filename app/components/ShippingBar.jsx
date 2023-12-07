@@ -20,18 +20,11 @@ const ShippingBar = ({totalAmount}) => {
             {minimumAmount > totalSpendAmount.amount ? (
             <>
             <p className="mb-4 text-xl font-semibold dark:text-gray-400">Free Standard Shipping</p>
-            <div>
-                <span>You're</span>
-                <Money className="px-2" data={{amount: amountAway > 0 ? amountAway.toString() : "0", currencyCode: totalAmount.currencyCode }} />
-                <span>away from Free Express Shipping</span>
-                <div className="w-full bg-gray-200 rounded-full h-2.5 dark-bg-gray-700">
-                    <div className="bg-[#0a56a5] h-2.5 rounded-full" style={{width: `${remainingPercent > 100 ? 100 : remainingPercent}%`}}></div> 
-                </div>
-            </div>
+            <p className="text-sm">You are <Money className="inline-block text-xs font-medium px-3 py-1 bg-[#0a56a5] text-white" data={{amount: amountAway > 0 ? amountAway.toString() : "0", currencyCode: totalAmount.currencyCode }} /> away from Free Express Shipping!</p>
             </>
             )  : ( 
                 <>
-                    <p> Free Express Shipping! </p>
+                    <p> Free Express Shipping! 🎉 </p>
                 </>
                  )  } 
         </div>

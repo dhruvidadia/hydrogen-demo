@@ -1,6 +1,6 @@
 import {defer, json} from '@shopify/remix-oxygen';
 import {Await, useLoaderData, Link} from '@remix-run/react';
-import {Suspense} from 'react';
+import {Suspense, useState} from 'react';
 import {Image, Money, VariantSelector} from '@shopify/hydrogen';
 import HomeSlider from '~/components/HomeSlider';
 import MasonryCollection from '~/components/MasonryCollection';
@@ -37,14 +37,11 @@ export const action = async ({request,context}) => {
       if (customerCreate?.userErrors?.length) {
         throw new Error(customerCreate?.userErrors[0].message);
       }
-      console.log("TRY blockkkk")
       return json(
         {error: null},
       );
 
 } catch (error) {
-  console.log("Errorrrrrr")
-  
     if (error instanceof Error) {
       console.log(error.message)
       return json({error: error.message}, {status: 400});
@@ -100,7 +97,8 @@ function FeaturedCollection({collection}) {
 }
 
 function RecommendedProducts({products}) {
-  
+  let isMultiImg  = false;
+  let over = false;
   return (
     <div className="recommended-products">
       <h2>Recommended <mark className="px-2 text-white bg-[#0a56a5] rounded dark:bg-[#0a56a5]">Products</mark></h2>
@@ -109,6 +107,7 @@ function RecommendedProducts({products}) {
           {({products}) => (
             <div className="recommended-products-grid">
               {products.nodes.map((product,index) => (
+                <>
                <Card className="w-96 py-4 relative overflow-hidden" 
                data-aos="flip-left"
                data-aos-offset="200"
@@ -123,7 +122,7 @@ function RecommendedProducts({products}) {
                     key={index+product.id}
                     to={`/products/${product.handle}`}
                   >
-                  <CardHeader shadow={false} floated={false} className="h-96">
+                  <CardHeader shadow={false} floated={false} className="h-96 hover:no-underline">
                   { product.availableForSale ? (
                     <span class="text-xs font-medium px-3 py-1 rounded-full bg-green-600 text-white ml-2.5">In Stock</span> ) : 
                     <span class="text-xs font-medium px-3 py-1 rounded-full bg-red-600 text-white ml-2.5">Sold Out</span>
@@ -131,12 +130,13 @@ function RecommendedProducts({products}) {
                   { product?.variants?.nodes[0].compareAtPrice?.amount && (
                     <span class="text-xs font-medium px-3 py-1 rounded-full bg-pink-900 text-white ml-2.5">Sale</span> )
                   }
-                  
+                  {  isMultiImg = product?.images?.edges.length > 1 ? true : false }
                     <Image
-                      data={product.images.nodes[0]}
+                      src={over && isMultiImg ? product?.images?.edges[1].node.url : product?.images?.edges[0].node.url }
                       aspectRatio="1/1"
                       sizes="(min-width: 45em) 20vw, 50vw"
-                      className='p-8 rounded-t-lg'
+                      className='p-8 rounded-t-lg hover:no-underline'
+                      alt={product.title}
                     />
                   </CardHeader>
                   </Link>
@@ -219,6 +219,7 @@ function RecommendedProducts({products}) {
                   </CardBody>
                     <QuickView product={product} />
                 </Card>
+                </>
               ))}
             </div>
           )}
@@ -351,20 +352,14 @@ const RECOMMENDED_PRODUCTS_QUERY = `#graphql
       name
       values 
     }
-    featuredImage {
-      id
-      altText
-      url
-      width
-      height
-    }
-    images(first: 1) {
-      nodes {
-        id
+    images(first: 2) {
+      edges{
+        node {
         url
         altText
         width
         height
+      }
       }
     }
   }

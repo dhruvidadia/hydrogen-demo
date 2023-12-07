@@ -23,6 +23,8 @@ const firstVariant = product?.variants.nodes[0];
   product.selectedVariant = firstVariant;
   const {selectedVariant} = product;
   const [open, setOpen] = useState(false)
+  const [over, setOver] = useState(false);
+  const isMultiImg = product?.images?.edges.length > 1 ? true : false
 
   return (
     <>
@@ -65,12 +67,15 @@ const firstVariant = product?.variants.nodes[0];
                
                 <div className="grid w-full grid-cols-1 items-start gap-x-6 gap-y-8 sm:grid-cols-12 lg:gap-x-8">
                     
-                  <div className="aspect-h-3 aspect-w-2 overflow-hidden px-4 py-4 sm:col-span-4 lg:col-span-5">
-                  {product.featuredImage && (
+                  <div className="aspect-h-3 aspect-w-2 overflow-hidden px-4 py-4 sm:col-span-4 lg:col-span-5"
+                  onMouseOver={() => setOver(true)}
+                  onMouseOut={() => setOver(false)}
+                  >
+                  {product?.images?.edges.length && (
                     <Image
-                        alt={product.featuredImage.altText || product.title}
+                        alt={product.title}
                         aspectRatio="1/1"
-                        data={product.featuredImage}
+                        src={over && isMultiImg ? product?.images?.edges[1]?.node.url : product?.images?.edges[0]?.node.url }
                         sizes="(min-width: 45em) 400px, 100vw"
                     />
                     )}
@@ -89,7 +94,7 @@ const firstVariant = product?.variants.nodes[0];
                           to={`/products/${product.handle}`}
                           className="hover:no-underline"
                         ><h2 className="text-xl font-bold text-gray-900 sm:pr-12 hover:text-gray-700">{product.title} 
-                        {selectedVariant?.compareAtPrice && (<span class="text-sm font-medium text-rose-500 dark:text-rose-200"> Sale</span>)}</h2></Link>
+                        {selectedVariant?.compareAtPrice && (<span className="text-sm font-medium text-rose-500 dark:text-rose-200"> Sale</span>)}</h2></Link>
                     <p className="mb-2 text-gray-700 dark:text-gray-400 text-sm">{product.description}</p>
                     <ProductPrice selectedVariant={selectedVariant} product={product} />
                     <div className='pb-4 mb-6 border-b border-gray-300 dark:border-gray-700' ></div>
@@ -159,9 +164,9 @@ const firstVariant = product?.variants.nodes[0];
                         }
                     </VariantSelector>
                     
-                    <div className="justify-center items-center mt-4 mb-4">
+                    {/* <div className="justify-center items-center mt-4 mb-4">
                     
-                        {/* <AddToCartButton
+                        <AddToCartButton
                           disabled={!selectedVariant || !selectedVariant.availableForSale}
                           onClick={() => {
                             window.location.href = window.location.href + '#cart-aside';
@@ -178,8 +183,8 @@ const firstVariant = product?.variants.nodes[0];
                           }
                         >
                           {selectedVariant?.availableForSale ? 'Add to cart' : 'Sold out'}
-                        </AddToCartButton> */}
-                    </div>
+                        </AddToCartButton>
+                    </div> */}
                     </div>
                   </div>
                 </div>
@@ -228,7 +233,7 @@ function ProductPrice({selectedVariant,product}) {
         <>
           <div className="product-price-on-sale">
             {selectedVariant ? <Money data={selectedVariant.price} /> : null}
-            <span class="inline-block text-base font-normal text-red-600 line-through dark:text-red-600 p-1"><Money data={selectedVariant.compareAtPrice} /></span>
+            <span className="inline-block text-base font-normal text-red-600 line-through dark:text-red-600 p-1"><Money data={selectedVariant.compareAtPrice} /></span>
           </div>
         </>
       ) : (

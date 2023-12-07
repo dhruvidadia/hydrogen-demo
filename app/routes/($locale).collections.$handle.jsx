@@ -17,6 +17,7 @@ import {
 } from "@material-tailwind/react";
 import {useVariantUrl} from '~/utils';
 import QuickView from '~/components/QuickView';
+import { useState } from 'react';
 
 
 export const meta = ({data}) => {
@@ -28,7 +29,7 @@ export async function loader({request, params, context}) {
   const {handle} = params;
   const {storefront} = context;
   const paginationVariables = getPaginationVariables(request, {
-    pageBy: 8,
+    pageBy: 32,
   });
 
   if (!handle) {
@@ -109,38 +110,16 @@ function ProductsGrid({products}) {
   );
 }
 
-function ProductItem({product, loading}) {
-  const variant = product.variants.nodes[0];
-  const variantUrl = useVariantUrl(product.handle, variant.selectedOptions);
-  return (
-    <Link
-      className="product-item"
-      key={product.id}
-      prefetch="intent"
-      to={variantUrl}
-    >
-      {product.featuredImage && (
-        <Image
-          alt={product.featuredImage.altText || product.title}
-          aspectRatio="1/1"
-          data={product.featuredImage}
-          loading={loading}
-          sizes="(min-width: 45em) 400px, 100vw"
-        />
-      )}
-      <h4>{product.title}</h4>
-      <small>
-        <Money data={product.priceRange.minVariantPrice} />
-      </small>
-    </Link>
-  );
-}
-
 function EcommerceCard({product, loading}) {
   const variant = product.variants.nodes[0];
   const variantUrl = useVariantUrl(product.handle, variant.selectedOptions);
+  const [over, setOver] = useState(false);
+  const isMultiImg = product?.images?.edges.length > 1 ? true : false
   return (
-    <Card className="w-96 py-4 relative overflow-hidden">
+    <Card className="w-96 py-4 relative overflow-hidden" 
+      onMouseOver={() => setOver(true)}
+      onMouseOut={() => setOver(false)}
+    >
       <Link
         className="product-item px-4"
         key={product.id}
@@ -149,17 +128,17 @@ function EcommerceCard({product, loading}) {
       >
       <CardHeader shadow={false} floated={false} className="h-96">
       { product.availableForSale ? (
-        <span class="text-xs font-medium px-3 py-1 rounded-full bg-green-600 text-white">In Stock</span> ) : 
-        <span class="text-xs font-medium px-3 py-1 rounded-full bg-red-600 text-white">Sold Out</span>
+        <span className="text-xs font-medium px-3 py-1 rounded-full bg-green-600 text-white">In Stock</span> ) : 
+        <span className="text-xs font-medium px-3 py-1 rounded-full bg-red-600 text-white">Sold Out</span>
       }
       { product?.variants?.nodes[0].compareAtPrice?.amount && (
-        <span class="text-xs font-medium px-3 py-1 rounded-full bg-pink-900 text-white ml-2.5">Sale</span> )
+        <span className="text-xs font-medium px-3 py-1 rounded-full bg-pink-900 text-white ml-2.5">Sale</span> )
       }
-        {product.featuredImage && (
+        {product?.images?.edges.length && (
           <Image
-            alt={product.featuredImage.altText || product.title}
+            alt={product.title}
             aspectRatio="1/1"
-            data={product.featuredImage}
+            src={over && isMultiImg ? product?.images?.edges[1]?.node.url : product?.images?.edges[0]?.node.url }
             loading={loading}
             sizes="(min-width: 45em) 400px, 100vw"
             className='mt-2'
@@ -186,7 +165,7 @@ function EcommerceCard({product, loading}) {
             <>
               <div className="flex">
                 {product?.variants?.nodes[0].price?.amount ? <Money className='mr-1' data={product?.variants.nodes[0]?.price} /> : null}
-                <span class="inline-block text-base font-normal text-red-600 line-through dark:text-red-600 text-sm mt-1"><Money data={product?.variants?.nodes[0].compareAtPrice} /></span>
+                <span className="inline-block text-base font-normal text-red-600 line-through dark:text-red-600 text-sm mt-1"><Money data={product?.variants?.nodes[0].compareAtPrice} /></span>
               </div>
             </>
           ) : (
@@ -268,13 +247,12 @@ const PRODUCT_ITEM_FRAGMENT = `#graphql
       name
       values
     }
-    
-    featuredImage {
-      id
-      altText
-      url
-      width
-      height
+    images(first:2){
+      edges{
+        node{
+          url
+        }
+      }
     }
     priceRange {
       minVariantPrice {
