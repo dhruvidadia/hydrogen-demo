@@ -52,13 +52,10 @@ export const action = async ({request,context}) => {
 }
 export async function loader({context}) {
   const {storefront} = context;
-  const {collections} = await storefront.query(FEATURED_COLLECTION_QUERY);
-  const featuredCollection = collections.nodes[0];
   const recommendedProducts = storefront.query(RECOMMENDED_PRODUCTS_QUERY);
 
   const masonryCollections = await storefront.query(MASONRY_COLLECTION_QUERY);
-
-  return defer({featuredCollection, recommendedProducts, masonryCollections});
+  return defer({recommendedProducts, masonryCollections});
 }
 
 export default function Homepage() {
@@ -68,31 +65,12 @@ export default function Homepage() {
       <HomeSlider /> 
       <br />
       <MasonryCollection items={data.masonryCollections?.collections?.nodes} />
-      {/* <FeaturedCollection collection={data.featuredCollection} /> */}
       <br />
       <StaticBlock />
       <br />
       <RecommendedProducts products={data.recommendedProducts} />
       <Testimonials />
     </div>
-  );
-}
-
-function FeaturedCollection({collection}) {
-  if (!collection) return null;
-  const image = collection?.image;
-  return (
-    <Link
-      className="featured-collection"
-      to={`/collections/${collection.handle}`}
-    >
-      {image && (
-        <div className="featured-collection-image">
-          <Image data={image} sizes="100vw" />
-        </div>
-      )}
-      <h1>{collection.title}</h1>
-    </Link>
   );
 }
 
@@ -124,11 +102,11 @@ function RecommendedProducts({products}) {
                   >
                   <CardHeader shadow={false} floated={false} className="h-96 hover:no-underline">
                   { product.availableForSale ? (
-                    <span class="text-xs font-medium px-3 py-1 rounded-full bg-green-600 text-white ml-2.5">In Stock</span> ) : 
-                    <span class="text-xs font-medium px-3 py-1 rounded-full bg-red-600 text-white ml-2.5">Sold Out</span>
+                    <span className="text-xs font-medium px-3 py-1 rounded-full bg-green-600 text-white ml-2.5">In Stock</span> ) : 
+                    <span className="text-xs font-medium px-3 py-1 rounded-full bg-red-600 text-white ml-2.5">Sold Out</span>
                   }
                   { product?.variants?.nodes[0].compareAtPrice?.amount && (
-                    <span class="text-xs font-medium px-3 py-1 rounded-full bg-pink-900 text-white ml-2.5">Sale</span> )
+                    <span className="text-xs font-medium px-3 py-1 rounded-full bg-pink-900 text-white ml-2.5">Sale</span> )
                   }
                   {  isMultiImg = product?.images?.edges.length > 1 ? true : false }
                     <Image
@@ -157,7 +135,7 @@ function RecommendedProducts({products}) {
                         <>
                           <div className="flex">
                             {product?.variants?.nodes[0].price?.amount ? <Money className='mr-1' data={product?.variants.nodes[0]?.price} /> : null}
-                            <span class="inline-block text-base font-normal text-red-600 line-through dark:text-red-600 text-sm mt-1"><Money data={product?.variants?.nodes[0].compareAtPrice} /></span>
+                            <span className="inline-block text-base font-normal text-red-600 line-through dark:text-red-600 text-sm mt-1"><Money data={product?.variants?.nodes[0].compareAtPrice} /></span>
                           </div>
                         </>
                       ) : (
@@ -293,29 +271,6 @@ query MasonryCollections($country: CountryCode, $language: LanguageCode)
   }
 `;
 
-const FEATURED_COLLECTION_QUERY = `#graphql
-  fragment FeaturedCollection on Collection {
-    id
-    title
-    image {
-      id
-      url
-      altText
-      width
-      height
-    }
-    handle
-  }
-  query FeaturedCollection($country: CountryCode, $language: LanguageCode)
-    @inContext(country: $country, language: $language) {
-    collections(first: 1, sortKey: UPDATED_AT, reverse: true) {
-      nodes {
-        ...FeaturedCollection
-      }
-    }
-  }
-`;
-
 const RECOMMENDED_PRODUCTS_QUERY = `#graphql
   fragment RecommendedProduct on Product {
     availableForSale
@@ -365,7 +320,7 @@ const RECOMMENDED_PRODUCTS_QUERY = `#graphql
   }
   query RecommendedProducts ($country: CountryCode, $language: LanguageCode)
     @inContext(country: $country, language: $language) {
-    products(first: 4, sortKey: UPDATED_AT, reverse: true, query:"tag:recommendedproduct") {
+    products(first: 8, sortKey: UPDATED_AT, reverse: true, query:"tag:recommendedproduct") {
       nodes {
         ...RecommendedProduct
       }
