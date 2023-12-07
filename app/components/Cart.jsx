@@ -177,22 +177,20 @@ function CartLineQuantity({line}) {
           disabled={quantity <= 1}
           name="decrease-quantity"
           value={prevQuantity}
-          className='bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400  cursor-pointer outline-none'
+          className='bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400  cursor-pointer outline-none px-2'
         >
-          <span className="m-auto text-2xl font-thin">−</span>
+          <span className="m-auto text-l font-thin">−</span>
         </button>
       </CartLineUpdateButton>
-      &nbsp;
-      <span className='px-4'>{quantity}</span>
-      &nbsp;
+      <span className='px-4 bg-gray-200 hover:bg-gray-200 cursor-pointer outline-none  m-auto text-l'>{quantity}</span>
       <CartLineUpdateButton lines={[{id: lineId, quantity: nextQuantity}]}>
         <button
           aria-label="Increase quantity"
           name="increase-quantity"
           value={nextQuantity}
-          className='bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400  cursor-pointer outline-none'
+          className='bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400  cursor-pointer outline-none px-2'
         >
-          <span className="m-auto text-2xl font-thin">+</span>
+          <span className="m-auto text-l font-thin">+</span>
         </button>
       </CartLineUpdateButton>
       </div>
