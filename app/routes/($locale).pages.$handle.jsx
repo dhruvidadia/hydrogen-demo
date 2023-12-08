@@ -1,6 +1,7 @@
 import {json} from '@shopify/remix-oxygen';
 import {useLoaderData, useActionData} from '@remix-run/react';
 import ContactUs from '~/components/ContactUs';
+import Faqs from '~/components/Faqs';
 import Pages from '~/components/Pages';
 import ThumbSlider from '~/components/ThumbSlider';
 
@@ -54,21 +55,49 @@ export default function Page() {
   const {page} = useLoaderData();
   const action = useActionData();
   const showMessage = (action?.msg) ? action.msg : false;
-  return (
-    <div className="page">
-      {(page.handle == 'contact') ? (
-        <ContactUs msg={showMessage} />
-      ) : <>
-            <header>
-              <h1 className="text-center">{page.title}</h1>
-            </header>
-            <Pages />
-            {/* <main dangerouslySetInnerHTML={{__html: page.body}} /> */}
-        </>
-      }
-      <ThumbSlider />
-    </div>
-  );
+  return(
+    <>
+    {(page.handle == 'contact' || page.handle == 'faqs') ? 
+      <>
+        {(page.handle == 'contact') && (
+          <ContactUs msg={showMessage} />
+        )}
+        {(page.handle == 'faqs') && (
+          <Faqs content={page.body} title={page.title} />
+        )}
+      </>
+     : 
+      <>
+        <header>
+            <h1 className="text-center justify-center">{page.title}</h1>
+          </header>
+          {/* <main dangerouslySetInnerHTML={{__html: page.body}} /> */}
+          <Pages />
+      </>
+    }
+    <ThumbSlider />
+    </>
+  )
+
+
+
+
+
+  // return (
+  //   <div className="page">
+  //     {(page.handle == 'contact') ? (
+  //       <ContactUs msg={showMessage} />
+  //     )  : <>
+  //           <header>
+  //             <h1 className="text-center">{page.title}</h1>
+  //           </header>
+  //           <Pages />
+  //           {/* <main dangerouslySetInnerHTML={{__html: page.body}} /> */}
+  //       </>
+  //     }
+  //     <ThumbSlider />
+  //   </div>
+  // );
 }
 
 const PAGE_QUERY = `#graphql

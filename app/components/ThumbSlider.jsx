@@ -52,7 +52,7 @@ const ThumbSlider = () => {
         </div>
       </div>
     </div>
-        <div className='pt-6 mt-8 bg-gray-50 shadow-lg' >
+        <div>
             <p className='text-center justify-center tracking-tight font-bold text-gray-900 dark:text-white'>Our Team</p>
             <h2 className='text-center justify-center mb-4 text-3xl tracking-tight font-extrabold text-gray-900 sm:text-4xl dark:text-white pb-3'>Who we are
             </h2>
