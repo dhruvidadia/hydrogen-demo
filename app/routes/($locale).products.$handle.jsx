@@ -3,6 +3,7 @@ import {defer, redirect} from '@shopify/remix-oxygen';
 import {Await, Link, useLoaderData, useActionData} from '@remix-run/react';
 import {ShopPayButton} from '@shopify/hydrogen-react';
 import ProductTabs from '~/components/ProductTabs';
+import RecommendedProduct from '~/components/RecommendedProduct';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import {Zoom, Pagination, Navigation } from 'swiper/modules';
 import {json} from '@shopify/remix-oxygen';
@@ -69,6 +70,7 @@ export async function loader({params, request, context}) {
     variables: {handle, selectedOptions},
   });
 
+
   if (!product?.id) {
     throw new Response(null, {status: 404});
   }
@@ -98,8 +100,8 @@ export async function loader({params, request, context}) {
   const variants = storefront.query(VARIANTS_QUERY, {
     variables: {handle},
   });
-
-  return defer({product, variants, shop});
+  const recommended = getRecommendedProducts(context.storefront, product.id);
+  return defer({product, variants, shop,recommended});
 }
 
 function redirectToFirstVariant({product, request}) {
@@ -128,17 +130,15 @@ export default function Product() {
     });
   },[])
 
-  const {product, variants, shop} = useLoaderData();
+  const {product, variants, shop,recommended} = useLoaderData();
   const {selectedVariant} = product;
   const thumbnails = product.images?.edges;
-
   const swiperRef = useRef(null)
   useEffect(() => {
     {thumbnails.map((img,index) => {
       img?.node?.url === selectedVariant?.image?.url ? swiperRef.current.swiper.slideTo(index) : '';
     })}
     },[selectedVariant])
-    console.log(product)
   return (
     <div>
       <div className="product">
@@ -189,7 +189,17 @@ export default function Product() {
         
       </div>
     <ProductTabs product={product} />
-    <CustomBlock />
+    <Suspense fallback={<div className="h-32" />}>
+        <Await
+          resolve={recommended}
+        >
+          {(products) => (
+            <RecommendedProduct products={products} />
+          )}
+        </Await>
+      </Suspense>
+   
+    {/* <CustomBlock /> */}
     </div>
     
   );
@@ -664,3 +674,50 @@ const VARIANTS_QUERY = `#graphql
     }
   }
 `;
+
+const RECOMMENDED_PRODUCTS_QUERY = `#graphql
+query productRecommendations(
+  $productId: ID!
+  $country: CountryCode
+  $language: LanguageCode
+)@inContext(country: $country, language: $language) {
+  productRecommendations(productId: $productId) {
+    handle
+    id
+    availableForSale
+    images(first: 2) {
+      edges {
+        node {
+          id
+          url
+        }
+      }
+    }
+    title
+    variants(first: 1) {
+        nodes {
+          id
+          compareAtPrice {
+            amount
+            currencyCode
+          }
+          price {
+            amount
+            currencyCode
+          }
+        }
+    }
+  }
+}
+`;
+
+async function getRecommendedProducts(
+  storefront,
+  productId,
+) {
+  const products = await storefront.query(RECOMMENDED_PRODUCTS_QUERY, {
+    variables: {productId, count: 12},
+  });
+
+  return {nodes: products};
+}
