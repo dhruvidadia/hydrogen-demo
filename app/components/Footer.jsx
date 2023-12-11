@@ -5,8 +5,8 @@ import { Image } from '@shopify/hydrogen';
 export function Footer({menu}) {
   const currentYear = new Date().getFullYear();
   const footerdata = useLoaderData();
-  const quicklinks = footerdata.quicklinks.menu;
-  const company = footerdata.company.menu;
+  const quicklinks = footerdata?.quicklinks.menu;
+  const company = footerdata?.company.menu;
    
   return (
     <>

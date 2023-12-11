@@ -25,6 +25,7 @@ import swiperpage from 'swiper/css/pagination';
 import swipernav from 'swiper/css/navigation';
 import swipereffect from 'swiper/css/effect-coverflow';
 import swiperzoom from 'swiper/css/zoom';
+import NotFound from '~/components/NotFound';
 
 // This is important to avoid re-fetching root queries on sub-navigations
 export const shouldRevalidate = ({formMethod, currentUrl, nextUrl}) => {
@@ -173,13 +174,22 @@ export function ErrorBoundary() {
       <body>
         <Layout {...root.data}>
           <div className="route-error">
-            <h1>Oops</h1>
-            <h2>{errorStatus}</h2>
-            {errorMessage && (
-              <fieldset>
-                <pre>{errorMessage}</pre>
-              </fieldset>
-            )}
+            {
+              errorStatus == 404 ? (
+                <NotFound />
+            )
+                :
+                <>
+                <h1>Oops!</h1>
+                <h2>{errorStatus}</h2>
+                {errorMessage && (
+                  <fieldset>
+                    <pre>{errorMessage}</pre>
+                  </fieldset>
+                )}
+                </>
+            }
+            
           </div>
         </Layout>
         <ScrollRestoration nonce={nonce} />

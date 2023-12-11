@@ -23,7 +23,7 @@ const MasonryCollection = ({items}) => {
                                                 className="transform-gpu  p-4 space-y-3 text-xl group-hover:opacity-100 group-hover:translate-y-0 translate-y-4 pb-10 transform transition duration-300 ease-in-out"
                                             >
                                                 <div className="font-bold">{item.title}</div>
-                                                <div className="opacity-60 text-sm ">
+                                                <div className="opacity-60 text-sm">
                                                     <Button
                                                         size="lg"
                                                         variant="text"

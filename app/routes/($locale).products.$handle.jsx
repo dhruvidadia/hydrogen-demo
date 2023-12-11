@@ -716,7 +716,7 @@ async function getRecommendedProducts(
   productId,
 ) {
   const products = await storefront.query(RECOMMENDED_PRODUCTS_QUERY, {
-    variables: {productId, count: 12},
+    variables: {productId, count: 10},
   });
 
   return {nodes: products};

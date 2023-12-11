@@ -75,8 +75,6 @@ export default function Homepage() {
 }
 
 function RecommendedProducts({products}) {
-  let isMultiImg  = false;
-  let over = false;
   return (
     <div className="recommended-products">
       <h2>Recommended <mark className="px-2 text-white bg-[#0a56a5] rounded dark:bg-[#0a56a5]">Products</mark></h2>
@@ -84,8 +82,11 @@ function RecommendedProducts({products}) {
         <Await resolve={products}>
           {({products}) => (
             <div className="recommended-products-grid">
-              {products.nodes.map((product,index) => (
-                <>
+              {products.nodes.map((product,index) => {
+                const [over, setOver] = useState(false);
+                const isMultiImg = product?.images?.edges.length > 1 ? true : false
+                return(
+                  <>
                <Card className="w-96 py-4 relative overflow-hidden" 
                data-aos="flip-left"
                data-aos-offset="200"
@@ -95,6 +96,8 @@ function RecommendedProducts({products}) {
                data-aos-mirror="true"
                data-aos-once="false"
                key={'product-'+index}
+               onMouseOver={() => setOver(true)}
+               onMouseOut={() => setOver(false)}
                >
                   <Link
                     key={index+product.id}
@@ -108,7 +111,6 @@ function RecommendedProducts({products}) {
                   { product?.variants?.nodes[0].compareAtPrice?.amount && (
                     <span className="text-xs font-medium px-3 py-1 rounded-full bg-pink-900 text-white ml-2.5">Sale</span> )
                   }
-                  {  isMultiImg = product?.images?.edges.length > 1 ? true : false }
                     <Image
                       src={over && isMultiImg ? product?.images?.edges[1].node.url : product?.images?.edges[0].node.url }
                       aspectRatio="1/1"
@@ -198,7 +200,9 @@ function RecommendedProducts({products}) {
                     <QuickView product={product} />
                 </Card>
                 </>
-              ))}
+                );
+                
+              })}
             </div>
           )}
         </Await>

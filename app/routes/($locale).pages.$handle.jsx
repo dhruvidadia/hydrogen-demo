@@ -79,25 +79,6 @@ export default function Page() {
     </>
   )
 
-
-
-
-
-  // return (
-  //   <div className="page">
-  //     {(page.handle == 'contact') ? (
-  //       <ContactUs msg={showMessage} />
-  //     )  : <>
-  //           <header>
-  //             <h1 className="text-center">{page.title}</h1>
-  //           </header>
-  //           <Pages />
-  //           {/* <main dangerouslySetInnerHTML={{__html: page.body}} /> */}
-  //       </>
-  //     }
-  //     <ThumbSlider />
-  //   </div>
-  // );
 }
 
 const PAGE_QUERY = `#graphql
