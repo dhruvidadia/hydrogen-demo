@@ -45,8 +45,7 @@ const NewsletterForm = () => {
   };
     return (
         <section className="bg-white dark:bg-gray-900"
-        // data-aos="fade-right"
-        // data-aos-easing="ease-in-out"
+        data-aos="fade" data-aos-once="true"
         >
             <div className="px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
                 <div className="mx-auto max-w-screen-md sm:text-center">

@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom';
 
 const MasonryCollection = ({items}) => {
     return (
-        <div className='custom-collection'>
+        <div className='custom-collection' data-aos="fade" data-aos-once="true">
             
             <h2>Featured <mark className="px-2 text-white bg-[#0a56a5] rounded dark:bg-[#0a56a5]">Collection</mark></h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {items.map((item) => {
                 
                     return (
@@ -52,7 +52,7 @@ const MasonryCollection = ({items}) => {
                                     </div>
                                         <Image
                                             alt={item.title}
-                                            className="object-cover w-full aspect-square group-hover:scale-110 transition duration-300 ease-in-out"
+                                            className="object-cover w-full aspect-square group-hover:scale-110 transition duration-1000 ease-in-out"
                                             src={item.image.url} 
                                             width={397}
                                             height={223}

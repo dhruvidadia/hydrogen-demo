@@ -88,13 +88,8 @@ function RecommendedProducts({products}) {
                 return(
                   <>
                <Card className="w-96 py-4 relative overflow-hidden" 
-               data-aos="flip-left"
-               data-aos-offset="200"
-               data-aos-delay="50"
-               data-aos-duration="500"
-               data-aos-easing="ease-in-out"
-               data-aos-mirror="true"
-               data-aos-once="false"
+               data-aos="fade"
+               data-aos-once="true"
                key={'product-'+index}
                onMouseOver={() => setOver(true)}
                onMouseOut={() => setOver(false)}
@@ -216,13 +211,8 @@ function StaticBlock () {
   return (
     
     <section className="bg-center bg-no-repeat bg-[url('https://cdn.shopify.com/s/files/1/0570/4335/3681/files/conference.jpg?v=1697792736')] bg-gray-700 bg-blend-multiply"
-    data-aos="fade-up"
-    data-aos-offset="200"
-    data-aos-delay="50"
-    data-aos-duration="500"
-    data-aos-easing="ease-in-out"
-    data-aos-mirror="true"
-    data-aos-once="false"
+    data-aos="fade"
+    data-aos-once="true"
     >
         <div className="px-4 mx-auto max-w-screen-xl text-center py-24 lg:py-56">
             <h1 className="mb-4 text-4xl font-extrabold tracking-tight leading-none text-white md:text-5xl lg:text-6xl">We invest in the world’s potential</h1>

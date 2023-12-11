@@ -12,7 +12,7 @@ const HomeSlider = () => {
         <>
         <div>
           <Swiper
-            effect={'coverflow'}
+            effect={'crossFade'}
             grabCursor={true}
             centeredSlides={true}
             slidesPerView={1}
