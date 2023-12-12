@@ -134,6 +134,7 @@ export default function App() {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <meta property="og:image" content="https://cdn.shopify.com/s/files/1/0570/4335/3681/files/slide1.jpg?v=1697781952&width=1920&crop=center" />
         <Meta />
         <Links />
       </head>
