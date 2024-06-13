@@ -129,6 +129,7 @@ export default function App() {
   useEffect(() => {
     AOS.init();
   }, []);
+
   return (
     <html lang="en">
       <head>
@@ -137,6 +138,13 @@ export default function App() {
         <meta property="og:image" content="https://cdn.shopify.com/s/files/1/0570/4335/3681/files/slide1.jpg?v=1697781952&width=1920&crop=center" />
         <Meta />
         <Links />
+        <script 
+        dangerouslySetInnerHTML={{__html:`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-WMR9GR3B');
+        `}}></script>
       </head>
       <body>
         <Layout {...data}>
